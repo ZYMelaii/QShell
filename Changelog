@@ -1,8 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [0.0.1] - 2021-7-28
+## [0.0.1.2] - 2021-7-28
+### Add
+- build-in function `clear`
+### Fixed
+- function `qsh_reset_cmdline_ptr` [using an invalid pointer]
+- function `qsh_realine` [unexpected errors in reading a long cmdline]
+
+## [0.0.1.1] - 2021-7-28
 ### Added
 - built-in function `exit`
 - a simple RPL
-- `shell.c`
+- source `shell.c`
