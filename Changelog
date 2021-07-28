@@ -25,5 +25,5 @@ All notable changes to this project will be documented in this file.
 ## [0.0.1.1] - 2021-7-28
 ### Added
 - built-in function `exit`
-- a simple RPL
+- simple usable RPL
 - source `shell.c`
