@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.0.1.4] - 2021-7-28
+### Fixed
+- function `qsh_close` [free an memory block on stack] (from `shellio.c`)
+
 ## [0.0.1.3] - 2021-7-28
 ### Added
 - source `core.h`
@@ -19,8 +23,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - build-in function `clear`
 ### Fixed
-- function `qsh_reset_cmdline_ptr` [using an invalid pointer]
-- function `qsh_realine` [unexpected errors in reading a long cmdline]
+- function `qsh_reset_cmdline_ptr` [using an invalid pointer] (from `shell.c`)
+- function `qsh_realine` [unexpected errors in reading a long cmdline] (from `qshell.c`)
 
 ## [0.0.1.1] - 2021-7-28
 ### Added
