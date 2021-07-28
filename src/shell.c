@@ -34,7 +34,7 @@ int qsh_open(shell_t *psh);
 void qsh_reset_cmdline_ptr(shell_t *psh);
 void qsh_close(shell_t *psh);
 void qsh_readline(shell_t *psh);
-void qsh_get_cmdline(shell_t *psh);
+const char *qsh_get_cmdline(shell_t *psh);
 //#- ENDLINE -
 
 void PrintPrompt(shell_t *psh);
