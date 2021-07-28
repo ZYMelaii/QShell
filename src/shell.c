@@ -7,27 +7,7 @@
 #include <signal.h>
 #include <windows.h>
 
-// void starup();
 void BetterPrint(int color_id, const char *format, ...);
-
-typedef struct _shell_s
-{
-	int bValid;
-
-	int bLogin;
-	char *user_name;
-	char *group_name;
-
-	char workdir[MAX_PATH];
-
-	#define BUF0_SIZE 256
-	#define BUF1_SIZE 1024
-	char buf_0[BUF0_SIZE];
-	char buf_1[BUF1_SIZE];
-	char *p_read;
-
-	//! EXTRA
-} shell_t;
 
 //#- core functions declaration-
 int qsh_open(shell_t *psh);
@@ -42,6 +22,8 @@ void PrintPrompt(shell_t *psh);
 int qsh_open(shell_t *psh)
 {
 	if (psh == NULL) return -1;
+
+	memset(psh, 0, sizeof(shell_t));
 
 	psh->user_name = strdup("ZYmelaii");
 	psh->group_name = strdup("admin");
@@ -64,6 +46,9 @@ int qsh_open(shell_t *psh)
 		}
 	} while (*++p != '\0');
 
+	psh->buf_1 = (char*)malloc(BUF1_SIZE + 1);
+	memset(psh->buf_1, 0, BUF1_SIZE + 1);
+
 	psh->bValid = 1;
 	return 0;
 }
@@ -81,6 +66,7 @@ void qsh_close(shell_t *psh)
 	free(psh->workdir);
 
 	qsh_reset_cmdline_ptr(psh);
+	free(psh->buf_1);
 
 	psh->bValid = 0;
 }
@@ -96,53 +82,73 @@ void qsh_reset_cmdline_ptr(shell_t *psh)
 	assert(psh != NULL);
 	assert(psh->bValid == 1);
 
+	psh->read_status_code = 0;
 	if (psh->p_read == NULL) return;
 
 	if (psh->p_read != psh->buf_0 && psh->p_read != psh->buf_1)
 	{
 		free(psh->p_read);
 	}
+
 	psh->p_read = NULL;
 }
 
 void qsh_readline(shell_t *psh)
 {	// read input cmdline and save the result to psh->p_read
+	//@warning: there're some problems facing ctrl-v behaviour
 	assert(psh != NULL);
 	assert(psh->bValid == 1);
 
 	qsh_reset_cmdline_ptr(psh);
 
-	int nCount = scanf("%[^\n]", psh->buf_0);
+	char format[32];
 
-	if (nCount <= 0)
-	{	// nCount=0: no input; *=1: EOF;
-		// TODO
+	sprintf(format, "%%%d[^\n]", BUF0_SIZE);
+	int bRet = scanf(format, psh->buf_0);
+	// printf("&> bRet[0]=%d\n", bRet);
+
+	if (bRet <= 0)
+	{
+		if (bRet == -1)
+		{
+			psh->read_status_code = -1;
+		}
 		fflush(stdin);
 		return;
 	}
 
+	int nCount = strlen(psh->buf_0);
 	if (nCount == BUF0_SIZE)
 	{	// overflow - 1
-		nCount = scanf("%[^\n]", psh->buf_1);
+		sprintf(format, "%%%d[^\n]", BUF1_SIZE);
+		bRet = scanf(format, psh->buf_1);
+		// printf("&> bRet[1]=%d\n", bRet);
 		fflush(stdin);
+		nCount = strlen(psh->buf_1);
 		if (nCount == BUF1_SIZE)
 		{	// overflow - 2, report an ERROR and exit
-			BetterPrint(1, "[ERROR] An overflow occurred while reading cmdline.");
+			BetterPrint(1, "[ERROR] An overflow occurred while reading cmdline.\n");
 			return;
 		} else if (nCount + BUF0_SIZE > BUF1_SIZE)
 		{	// merge buffer
 			psh->p_read = (char*)malloc(BUF0_SIZE + nCount + 1);
 			strcat(psh->p_read, psh->buf_0);
 			strcat(psh->p_read, psh->buf_1);
-		} else
-		{
+		} else if (bRet == 1) {
+			char *p = psh->buf_1 + nCount + 1, *q = p + BUF0_SIZE;
+			do { *--q = *--p; } while (p != psh->buf_1);
+			memcpy(psh->buf_1, psh->buf_0, BUF0_SIZE);
 			psh->p_read = psh->buf_1;
 		}
-	} else
+	}
+
+	if (psh->p_read == NULL)
 	{
+		fflush(stdin);
 		psh->p_read = psh->buf_0;
 	}
-	fflush(stdin);
+
+	psh->read_status_code = 1;
 }
 
 const char *qsh_get_cmdline(shell_t *psh)
@@ -173,14 +179,25 @@ int main(int argc, char const *argv[])
 	{
 		PrintPrompt(&sh);
 		qsh_readline(&sh);
-
 		const char *cmdline = qsh_get_cmdline(&sh);
 		if (cmdline != NULL)
 		{
 			//#- Add eval.. procedure here -
-			if (strcmp(cmdline, "exit") == 0) break;
+			if (strcmp(cmdline, "exit") == 0)
+			{
+				break;
+			} else if (strcmp(cmdline, "clear") == 0)
+			{
+				system("cls");
+			} else
+			{
+				BetterPrint(0, "QShell: `%s` command not found.\n", cmdline);
+			}
 			//#- ENDLINE -
-			BetterPrint(0, "%s\n", cmdline);
+		}
+		if (sh.read_status_code == -1)
+		{
+			printf("\n");
 		}
 	}
 
