@@ -48,9 +48,8 @@ void qsh_close(shell_t *psh)
 	{
 		free(psh->user_name);
 		free(psh->group_name);
+		psh->bLogin = 0;
 	}
-
-	free(psh->workdir);
 
 	qsh_reset_cmdline_ptr(psh);
 	free(psh->buf_1);
