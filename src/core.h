@@ -2,6 +2,7 @@
 #define QSHELL_CORE_H
 
 #include <stddef.h>
+#include <stdint.h>
 
 #ifndef MAX_PATH
 #define MAX_PATH 260
@@ -70,7 +71,7 @@ struct _shell_s
 	int read_status_code; //! 从标准输入流写入命令行的状态
 
 //#- cmd -
-	struct _cmd_s prev_cmd;
+	struct _cmd_s *prev_cmd;
 
 //#- etc -
 };
@@ -95,7 +96,7 @@ struct _cmd_s
 	 *  @value:
 	 *     # {..., NULL}: /
 	 *******************************/
-	char *argv[]; //! 命令参数
+	char **argv; //! 命令参数
 	return_t ret_code; //! 返回值
 };
 typedef struct _cmd_s cmd_t;
