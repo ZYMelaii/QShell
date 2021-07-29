@@ -1,29 +1,24 @@
-core.h
+dependency-diagram:
++ core.h:
 	- shellio.c
-cmdline.h
++ cmdline.h:
 	- cmdline.c
-envr.h
++ envr.h:
 	- envr.c
 	- var.c
-eval.h
++ eval.h:
 	- builtin.c
 	- parse.c
-uiman.h
++ uiman.h:
 	- uiman.c
-qshw.h
++ qshw.h:
 	- qshw.c
++ @main:
+	- shell.c
 
-main: shell.c
-
-[0]
-core.h
-[1]
-envr.h
-[2]
-cmdline.h
-eval.h
-[3]
-uiman.h
-qshw.h
-[4]
-shell.c
+priority:
+[0] core.h
+[1] envr.h
+[2] cmdline.h eval.h
+[3] uiman.h qshw.h
+[4] shell.c
