@@ -1,6 +1,21 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.0.2.1] - 2021-7-29
+### Added
+- source `eval.h`
+- source `uiman.h`
+- source `uiman.c`
+- source `envr.h`
+- source `envr.c`
+- source `var.c`
+- source `builtin.c`
+- handler for ctrl+break,shutdown,user-logout,window-close
+### Changed
+- unnecessary fragments in `shell.c` have been wrapped in functions `qshui_setup`,`qshui_cleanup`,`qshui_exit` [allow interruptive conditions] (from `uiman.c`)
+### Fixed
+- function `qsh_close` [logic error] （from `shellio.c`）
+
 ## [0.0.1.4] - 2021-7-28
 ### Fixed
 - function `qsh_close` [free an memory block on stack] (from `shellio.c`)
