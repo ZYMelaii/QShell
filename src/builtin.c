@@ -11,7 +11,6 @@ NEW_BUILTIN(help, psh, pc)
 	assert(pc != NULL);
 
 }
-
 NEW_BUILTIN(exit, psh, pc)
 {
 	assert(psh != NULL);

@@ -7,11 +7,30 @@
 #define MAX_PATH 260
 #endif
 
+/********************************
+ *	@author: ZYmelaii
+ *	@brief: 标准指令对象
+ *	@param: 
+ *	@note: 
+ *	@usage: 
+ *	@return:
+ *     # void: /
+********************************/
 typedef struct _cmd_s
 {
 
 } cmd_t;
 
+
+/********************************
+ *	@author: ZYmelaii
+ *	@brief: 核心QShell对象
+ *	@param: 
+ *	@note: 
+ *	@usage: 
+ *	@return:
+ *     # void: /
+********************************/
 typedef struct _shell_s
 {
 	int bValid;
@@ -37,7 +56,28 @@ typedef struct _shell_s
 } shell_t;
 
 //#- shellio.c -
+
+/********************************
+ *	@author: ZYmelaii
+ *	@brief: 创建QShell对象
+ *	@param: 
+ *	@note: 全局只能同时存在一个QShell对象
+ *	@usage: 
+ *	@return:
+ *     # -1: 给出的psh为无效指针，对象创建失败
+ *     # 0: 对象创建成功
+********************************/
 int qsh_open(shell_t *psh);
+
+/********************************
+ *	@author: ZYmelaii
+ *	@brief: 销毁QShell对象
+ *	@param: 
+ *	@note: 
+ *	@usage: 对于无效的QShell对象，`qsh_close`将忽略
+ *	@return:
+ *     # void: /
+********************************/
 void qsh_close(shell_t *psh);
 
 #endif
