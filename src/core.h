@@ -120,8 +120,8 @@ int qsh_open(shell_t *psh);
  *  @brief: 销毁QShell对象
  *  @param:
  *     # psh: QShell pointer
- *  @note: 
- *  @usage: 对于无效的QShell对象，`qsh_close`将忽略
+ *  @note: 对于无效的QShell对象，`qsh_close`将忽略
+ *  @usage: 
  *  @return:
  *     # void: /
  *******************************/
