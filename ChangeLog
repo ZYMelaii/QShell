@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - source `envr.c`
 - source `var.c`
 - source `builtin.c`
+- source `parse.c`
 - handler for ctrl+break,shutdown,user-logout,window-close
 ### Changed
 - unnecessary fragments in `shell.c` have been wrapped in functions `qshui_setup`,`qshui_cleanup`,`qshui_exit` [allow interruptive conditions] (from `uiman.c`)
