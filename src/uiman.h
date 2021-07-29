@@ -6,7 +6,8 @@
 /********************************
  *  @author: ZYmelaii
  *  @brief: QShell-GUI环境预搭建
- *  @param: 
+ *  @param:
+ *     # void: /
  *  @note: 使用QShell前调用，全局范围在环境销毁前仅调用一次
  *  @usage: 
  *  @return:
@@ -17,7 +18,8 @@ void qshui_setup();
 /********************************
  *  @author: ZYmelaii
  *  @brief: 清理QShell-GUI环境
- *  @param: 
+ *  @param:
+ *     # void: /
  *  @note: 已经创建的QShell对象将被关闭，此时创建QShell对象需重新调用`qshui_setup`
  *  @usage: 
  *  @return:
@@ -28,15 +30,13 @@ void qshui_cleanup();
 /********************************
  *  @author: ZYmelaii
  *  @brief: 中断QShell-GUI并清理环境
- *  @param: 
+ *  @param:
+ *     # void: /
  *  @note: 调用后程序结束
  *  @usage: 
  *  @return:
  *     # void: /
  *******************************/
 void qshui_exit();
-
-// extern void qshui_set_global_ptr(void*);
-// designed for `qsh_open` (shellio.c)
 
 #endif

@@ -1,0 +1,29 @@
+core.h
+	- shellio.c
+cmdline.h
+	- cmdline.c
+envr.h
+	- envr.c
+	- var.c
+eval.h
+	- builtin.c
+	- parse.c
+uiman.h
+	- uiman.c
+qshw.h
+	- qshw.c
+
+main: shell.c
+
+[0]
+core.h
+[1]
+envr.h
+[2]
+cmdline.h
+eval.h
+[3]
+uiman.h
+qshw.h
+[4]
+shell.c

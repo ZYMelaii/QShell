@@ -6,7 +6,8 @@
 /********************************
  *  @author: ZYmelaii
  *  @brief: 颜色代码
- *  @param: 
+ *  @param:
+ *     # void: /
  *  @note: 使用对象为`qshw_print`
  *  @usage: 
  *  @return:
@@ -24,7 +25,9 @@
  *  @author: ZYmelaii
  *  @brief: QShell标准输出，允许自定义颜色
  *  @param:
- *     # color: 颜色代码，如QSHW_WHITE
+ *     # color: color code, e.g. QSHW_WHITE indicates white
+ *     # format: format string or simply literal string
+ *     # ...: appended arguments for `format`
  *  @note: 
  *  @usage: qshw_print(QSHW_RED, "[ERROR] msg: %s; errno code: %d", sMsg, errCode)
  *  @return:
@@ -35,7 +38,8 @@ void qshw_print(int color, const char *format, ...);
 /********************************
  *  @author: ZYmelaii
  *  @brief: 打印提示符
- *  @param: 
+ *  @param:
+ *     # psh: QShell pointer
  *  @note: 提示符的内容由QShell决定
  *  @usage: 
  *  @return:
