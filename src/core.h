@@ -7,6 +7,11 @@
 #define MAX_PATH 260
 #endif
 
+typedef struct _cmd_s
+{
+
+} cmd_t;
+
 typedef struct _shell_s
 {
 	int bValid;

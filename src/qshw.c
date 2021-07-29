@@ -13,7 +13,7 @@ void qshw_print(int color, const char *format, ...)
 		FOREGROUND_GREEN, // green
 		FOREGROUND_BLUE, // blue
 		FOREGROUND_RED | FOREGROUND_GREEN, // yellow
-		FOREGROUND_RED | FOREGROUND_BLUE, // pink
+		FOREGROUND_RED | FOREGROUND_BLUE, // magenta
 		FOREGROUND_GREEN | FOREGROUND_BLUE, // cyan
 	};
 	const int colorNum = sizeof(colorCode) / sizeof(WORD);
@@ -44,6 +44,11 @@ void qshw_write_prompt(shell_t *psh)
 {
 	assert(psh != NULL);
 	assert(psh->bValid == 1);
+
+	if (psh->read_status_code == -1)
+	{
+		printf("\n");
+	}
 
 	qshw_print(QSHW_GREEN, "%s@%s:", psh->user_name, psh->group_name);
 	qshw_print(QSHW_BLUE, psh->workdir);

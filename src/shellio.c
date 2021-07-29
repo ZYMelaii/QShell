@@ -6,6 +6,9 @@
 #include "core.h"
 #include "cmdline.h"
 
+// uiman.c
+extern void qshui_set_global_ptr(void*);
+
 int qsh_open(shell_t *psh)
 {
 	if (psh == NULL) return -1;
@@ -37,12 +40,16 @@ int qsh_open(shell_t *psh)
 	memset(psh->buf_1, 0, BUF1_SIZE + 1);
 
 	psh->bValid = 1;
+
+	qshui_set_global_ptr(psh);
+
 	return 0;
 }
 
 void qsh_close(shell_t *psh)
 {
 	if (psh == NULL) return;
+	if (psh->bValid == 0) return;
 
 	if (psh->bLogin == 1)
 	{

@@ -2,20 +2,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <signal.h>
+#include <windows.h>
 
 #include "core.h"
 #include "cmdline.h"
+#include "eval.h"
 #include "qshw.h"
-
-void qsh_set_signal(int sig, void (*func)(int))
-{
-	signal(sig, func);
-}
+#include "uiman.h"
 
 int main(int argc, char const *argv[])
 {
-	qsh_set_signal(SIGINT, SIG_IGN); // ignore ctrl+c
+	qshui_setup();
 
 	shell_t sh;
 	qsh_open(&sh);
@@ -40,12 +37,12 @@ int main(int argc, char const *argv[])
 			}
 			//#- ENDLINE -
 		}
-		if (sh.read_status_code == -1)
-		{
-			printf("\n");
-		}
 	}
 
 	qsh_close(&sh);
-	return 0;
+
+	qshui_exit();
+
+	// QShell should never reach here
+	return -1;
 }
