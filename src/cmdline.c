@@ -50,8 +50,7 @@ int qsh_load_cmdline(shell_t *psh, const char *cmdline)
 }
 
 void qsh_readline(shell_t *psh)
-{	// read input cmdline and save the result to psh->p_read
-
+{
 	assert(psh != NULL);
 	assert(psh->bValid == 1);
 
