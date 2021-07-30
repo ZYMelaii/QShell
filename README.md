@@ -1,7 +1,7 @@
 # QShell
 轻型跨平台shell终端。
 
-`c 
+```c 
 //! 使用QShell环境
 int main()
 {
@@ -11,4 +11,4 @@ int main()
      qsh_close(&sh);
      return 0;
 }
-`
+```
