@@ -90,13 +90,22 @@ typedef struct _shell_s shell_t;
 struct _cmd_s
 {
 	struct _shell_s *root; //! QShell依赖
-	const char *cmd; //! 命令
+	const char *cmd; //! 命令 <=> cmd_t::argv[0]
 	/********************************
 	 *  @object: argv -> char**
 	 *  @value:
 	 *     # {..., NULL}: /
 	 *******************************/
 	char **argv; //! 命令参数
+	char *args; //! 命令参数源字符串
+	/********************************
+	 *  @object: succeed -> int
+	 *  @value:
+	 *     # 0: to be executed
+	 *     # -1: failed
+	 *     # 1: done
+	 *******************************/
+	int succeed; //! 是否执行成功
 	return_t ret_code; //! 返回值
 };
 typedef struct _cmd_s cmd_t;

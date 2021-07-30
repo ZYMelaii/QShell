@@ -5,7 +5,7 @@
 
 #include "qshw.h"
 
-void qshw_print(int color, const char *format, ...)
+void qshw_vprint(int color, const char *format, va_list args)
 {
 	WORD colorCode[] = {
 		FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE, // white
@@ -32,12 +32,45 @@ void qshw_print(int color, const char *format, ...)
 
 	SetConsoleTextAttribute(handle, colorCode[color]);
 
-	va_list args;
-	va_start(args, format);
 	vprintf(format, args);
-	va_end(args);
 
 	SetConsoleTextAttribute(handle, colorCode[0]);
+}
+
+void qshw_print(int color, const char *format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	qshw_vprint(color, format, args);
+	va_end(args);
+}
+
+void qshw_xprint(const char *format, ...)
+{	//@ 未检查安全性
+	// "...\x02\000...\x02..."
+	// "设定颜色|颜色代码|目标字符串|设定颜色结束";
+	va_list v, tmp;
+	va_start(tmp, format);
+
+	int color = 0;
+
+	char *s = qsh_strdup(format);
+	char *p = s, *q = p;
+	while (1)
+	{
+		if (*q == '\x02')
+		{
+			*q = '\0';
+			if (p == s)
+			{	//! 开头字符未设置颜色，默认按白色输出
+				va_copy(v, tmp);
+				qshw_vprint(color, p, v);
+			}
+			color = *++q;
+			p = ++q;
+		}
+	}
+	qsh_free(s);
 }
 
 void qshw_write_prompt(shell_t *psh)

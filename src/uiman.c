@@ -36,10 +36,10 @@ BOOL WINAPI qshuis_con_handler(DWORD event)
 {
 	switch (event)
 	{
-		case CTRL_BREAK_EVENT: // ctrl+break signal
-		case CTRL_CLOSE_EVENT: // close console
-		case CTRL_LOGOFF_EVENT: // user logout
-		case CTRL_SHUTDOWN_EVENT: // system shutdown
+		case CTRL_BREAK_EVENT: //! ctrl+break signal
+		case CTRL_CLOSE_EVENT: //! close console
+		case CTRL_LOGOFF_EVENT: //! user logout
+		case CTRL_SHUTDOWN_EVENT: //! system shutdown
 		{
 			qshui_exit();
 			printf("QShell: interrupted & safely quited.\n");
@@ -55,15 +55,15 @@ BOOL WINAPI qshuis_con_handler(DWORD event)
 
 void qshui_setup()
 {
-	//@init global vars
+	//! init global vars
 	_qsh_global_ptr = NULL;
 	_qsh_global_ui_status = 1;
 
-	//@config winform
+	//! config winform
 	qshuis_disable_ctrl_c();
 	// qshuis_disable_con_close();
 
-	//@config handler
+	//! config handler
 	if (SetConsoleCtrlHandler(qshuis_con_handler, TRUE) == 0)
 	{
 		qshw_print(QSHW_RED, "[ERROR] failure@SetConsoleCtrlHandler\n");
@@ -86,18 +86,18 @@ void qshui_cleanup()
 
 void qshui_exit()
 {
-	//@cleanup
+	//! cleanup
 	qshui_cleanup();
 	if (_qsh_global_counter != 0)
 	{
 		// printf("[WARNING] unexcepted exception");
 	}
 
-	//@restore
+	//! restore
 	// qshuis_enable_con_close();
 	SetConsoleCtrlHandler(NULL, FALSE);
 
-	//@exit
+	//! exit
 	exit(0);
 }
 

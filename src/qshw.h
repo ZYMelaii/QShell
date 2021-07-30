@@ -1,6 +1,8 @@
 #ifndef QSHELL_QSHW_H
 #define QSHELL_QSHW_H
 
+#include <stdarg.h>
+
 #include "core.h"
 
 /********************************

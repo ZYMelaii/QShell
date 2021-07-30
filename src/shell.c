@@ -3,7 +3,7 @@
 #include <process.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <windows.h>
+#include <errno.h>
 
 #include "core.h"
 #include "cmdline.h"
@@ -29,6 +29,58 @@ char** qsh_stroke(char **ps, const char *s, const char *delim)
 	return vs;
 }
 
+cmd_t* qsh_make_cmd(shell_t *psh, const char *cmdline)
+{
+	cmd_t *pc = qsh_malloc(sizeof(cmd_t));
+	memset(pc, 0, sizeof(cmd_t));
+
+	qsh_cmd_free(psh->prev_cmd);
+
+	pc->root = psh;
+	psh->prev_cmd = pc;
+	pc->argv = qsh_stroke(&pc->args, cmdline, " ");
+	pc->cmd = pc->argv[0];
+}
+
+void qsh_cmd_free(cmd_t *pc)
+{
+	if (pc == NULL) return;
+
+	pc->root->prev_cmd = NULL;
+
+	qsh_free(pc->argv);
+	qsh_free(pc->args);
+	qsh_free(pc);
+}
+
+int _qsh_exec(cmd_t *pc)
+{
+	_flushall();
+	intptr_t hproc = spawnvp(_P_NOWAIT, pc->cmd, pc->argv);
+	intptr_t hd = cwait(&pc->ret_code, hproc, NULL);
+
+	if (hd == -1)
+	{
+		pc->succeed = -1;
+		if (errno == ECHILD)
+		{
+			qshw_print(QSHW_WHITE, "QShell: `%s` command not found.\n", pc->cmd);
+		} else if (errno == EINVAL)
+		{
+			//! IGNORE
+		} else
+		{
+			qshw_print(QSHW_WHITE, "QShell: ");
+			qshw_print(QSHW_RED, "unknown error.");
+		}
+		return (~0);
+	} else
+	{
+		pc->succeed = 1;
+		printf("QShell: `%s` exit with %d.\n", pc->cmd, pc->ret_code);
+	}
+}
+
 int main(int argc, char const *argv[])
 {
 	qshui_setup();
@@ -52,24 +104,8 @@ int main(int argc, char const *argv[])
 				system("cls");
 			} else
 			{
-				char *s;
-				char **_argv = qsh_stroke(&s, cmdline, " ");
-
-				_flushall();
-
-				intptr_t hproc = spawnvp(_P_WAIT, _argv[0], _argv);
-
-				if (hproc == (~0))
-				{
-					qshw_print(QSHW_WHITE, "QShell: `%s` command not found.\n", _argv[0]);
-				} else
-				{
-					int termstat;
-					cwait(&termstat, hproc, _WAIT_CHILD);
-				}
-
-				qsh_free(_argv);
-				qsh_free(s);
+				qsh_make_cmd(&sh, cmdline);
+				_qsh_exec(sh.prev_cmd);
 			}
 			//#- ENDLINE -
 		}
