@@ -1,0 +1,65 @@
+built-in commands: echo cd mkdir
+variables: $HOME
+ - assume $HOME=/home
+external commands: grep check-and-done [ _ m4
+
+[0]
+$ [in] echo Hello World!
+$ [out] exec("echo","Hello","World","!")
+
+[1]
+$ [in] echo "
+Hello World
+!"
+$ [out] exec("echo","\nHello World\n!")
+
+[2]
+$ [in] echo "\"Hello World\"" "_328n_c21;R" _328n_c21;R
+$ [out] exec("echo", "\"Hello World\"", "_328n_c21;R", "_328n_c21", ";", "R")
+
+[3]
+$ [in] echo "Hello admwqe
+$ [out] exec("echo", "\"", "Hello", "admwqe")
+
+[4]
+$ [in] echo $HOME $(HOME) $Hello "\$HOME"
+$ [out] exec("echo", "/home", "/home", "$Hello", "$HOME")
+
+[5]
+$ [in] [ nothing ]
+$ [out] exec("[", "nothing", "]")
+
+[6]
+$ [in] check-and-done "..."
+$ [out] exec("check-and-donw", "...")
+
+[7]
+$ [in] [_]
+$ [out] command not found
+
+[8]
+$ [in] grep! input.txt
+$ [out] `grep!`: invalid cmdline
+
+[9]
+$ [in] a=[1+3]
+$ [out] eval("a=[1+3]") -> $a = 4
+
+[10]
+$ [in] a=$b
+$ [out] eval("a=$b") -> $b not found
+
+[11]
+$ [in] $[3+4 /4]
+$ [out] eval("$[3+4 /4]") -> 4
+
+[12]
+$ [in] a = 4
+b = 3
+c = $a + $b
+d = $[$a + $b]
+$ [out] eval("a = 4\nb = 3\nc = $a + $b\nd = $[$a + $b]")
+-> $a = 4
+   $b = 3
+   $c = 4 + 3
+   $d = 7
