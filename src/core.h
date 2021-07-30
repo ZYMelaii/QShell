@@ -59,7 +59,7 @@ struct _shell_s
 	 *     # shell_t::buf_1: BUF0_SIZE < length(p_read) <= BUF1_SIZE
 	 *     # ...: length(p_read) > BUF1_SIZE
 	 *******************************/
-	char *p_read; //! 最近一条成功存入的命令行 (read-only)
+	char *p_read; //! 当前存入的命令行 (read-only)
 
 	/********************************
 	 *  @object: read_statuc_code -> int
@@ -127,5 +127,45 @@ int qsh_open(shell_t *psh);
  *     # void: /
  *******************************/
 void qsh_close(shell_t *psh);
+
+//#- mmem.c -
+
+/********************************
+ *  @author: ZYmelaii
+ *  @brief: 动态分配内存空间
+ *  @param:
+ *     # size: size of mem-block
+ *  @note: 
+ *  @usage: 
+ *  @return:
+ *     # NULL: failed
+ *     # ...: done
+ *******************************/
+void* qsh_malloc(size_t size);
+
+/********************************
+ *  @author: ZYmelaii
+ *  @brief: 释放内存空间
+ *  @param:
+ *     # ptr: mem-block pointer
+ *  @note: 
+ *  @usage: 
+ *  @return:
+ *     # void: /
+ *******************************/
+void qsh_free(void *ptr);
+
+/********************************
+ *  @author: ZYmelaii
+ *  @brief: 字符串拷贝
+ *  @param:
+ *     # s: source string
+ *  @note: 不再需要时调用`qsh_free`释放内存空间
+ *  @usage: 
+ *  @return:
+ *     # NULL: failed
+ *     # ...: done
+ *******************************/
+char* qsh_strdup(const char *s);
 
 #endif

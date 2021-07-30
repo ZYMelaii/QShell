@@ -15,8 +15,8 @@ int qsh_open(shell_t *psh)
 
 	memset(psh, 0, sizeof(shell_t));
 
-	psh->user_name = strdup("ZYmelaii");
-	psh->group_name = strdup("admin");
+	psh->user_name = qsh_strdup("ZYmelaii");
+	psh->group_name = qsh_strdup("admin");
 	psh->bLogin = 1;
 
 	char buf[MAX_PATH];
@@ -36,7 +36,7 @@ int qsh_open(shell_t *psh)
 		}
 	} while (*++p != '\0');
 
-	psh->buf_1 = (char*)malloc(BUF1_SIZE + 1);
+	psh->buf_1 = (char*)qsh_malloc(BUF1_SIZE + 1);
 	memset(psh->buf_1, 0, BUF1_SIZE + 1);
 
 	psh->bValid = 1;
@@ -53,13 +53,13 @@ void qsh_close(shell_t *psh)
 
 	if (psh->bLogin == 1)
 	{
-		free(psh->user_name);
-		free(psh->group_name);
+		qsh_free(psh->user_name);
+		qsh_free(psh->group_name);
 		psh->bLogin = 0;
 	}
 
 	qsh_reset_cmdline_ptr(psh);
-	free(psh->buf_1);
+	qsh_free(psh->buf_1);
 
 	psh->bValid = 0;
 }

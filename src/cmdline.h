@@ -19,7 +19,21 @@ void qsh_reset_cmdline_ptr(shell_t *psh);
 
 /********************************
  *  @author: ZYmelaii
- *  @brief: 从交互界面（标准输入流）读入一行命令
+ *  @brief: 载入一条命令
+ *  @param:
+ *     # psh: QShell pointer
+ *     # cmdline: /
+ *  @note: 命令长度无限制
+ *  @usage: 
+ *  @return:
+ *     # -1: failed
+ *     # 0: done
+ *******************************/
+int qsh_load_cmdline(shell_t *psh, const char *cmdline);
+
+/********************************
+ *  @author: ZYmelaii
+ *  @brief: 从标准输入流读入一条命令
  *  @param:
  *     # psh: QShell pointer
  *  @note: 命令行字符数不可超过 BUF0_SIZE+BUF1_SIZE

@@ -9,6 +9,7 @@ dependency-diagram:
 + eval.h:
 	- builtin.c
 	- parse.c
+	- chrmap.c
 + uiman.h:
 	- uiman.c
 + qshw.h:
