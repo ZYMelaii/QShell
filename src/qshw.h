@@ -39,6 +39,19 @@ void qshw_print(int color, const char *format, ...);
 
 /********************************
  *  @author: ZYmelaii
+ *  @brief: QShell标准输出，允许内嵌颜色代码
+ *  @param:
+ *     # format: format string or simply literal string
+ *     # ...: appended arguments for `format`
+ *  @note: 颜色代码嵌入格式： "...\x02\03d[String]...\x02\03d..."，其中"d"处为"QSHW_*"颜色代码
+ *  @usage: qshw_xprint("QShell: \x02\031[ERROR] \x02\032this is a trick!")
+ *  @return:
+ *     # void: /
+ *******************************/
+void qshw_xprint(const char *format, ...);
+
+/********************************
+ *  @author: ZYmelaii
  *  @brief: 打印提示符
  *  @param:
  *     # psh: QShell pointer

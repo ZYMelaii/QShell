@@ -68,11 +68,11 @@ const char* qshw_match_format_token(const char *s, int *t_spec, int *t_len)
 	 * └────────┴───────────────┴────────────────────────┴─────────────────┴────────┴──────────┴───────┴────────────────┘
 	 *******************************/
 
+	*t_spec = -1;
 	*t_len = 0;
 
 	if (*s != '%')
 	{	//! 无效格式符
-		*t_spec = -1;
 		return s;
 	}
 
@@ -87,7 +87,6 @@ const char* qshw_match_format_token(const char *s, int *t_spec, int *t_len)
 
 	if (*p == '\0')
 	{	//! 无效格式符
-		*t_spec = -1;
 		return s;
 	}
 
@@ -124,17 +123,17 @@ const char* qshw_match_format_token(const char *s, int *t_spec, int *t_len)
 	}
 
 	*t_spec = -1;
+	*t_len = 0;
 	return s;
 }
 
 void qshw_xprint(const char *format, ...)
 {	//@ 未检查安全性
-	// "...\x02\000...\x02..."
-	// "设定颜色|颜色代码|目标字符串|设定颜色结束";
 	va_list v, tmp;
-	va_start(tmp, format);
+	va_start(v, format);
+	va_copy(tmp, v);
 
-	int color = 0;
+	int color = 030;
 
 	char *s = qsh_strdup(format);
 	char *p = s; //! 字符串起始指针
@@ -148,9 +147,9 @@ void qshw_xprint(const char *format, ...)
 			if (*q == '\0') b_quit = 1;
 			*q = '\0';
 
-			va_copy(v, tmp);
-			qshw_vprint(color, p, v);
+			qshw_vprint(color & 007, p, v);
 			va_end(v);
+			va_copy(v, tmp);
 
 			if (b_quit) break;
 
@@ -160,7 +159,7 @@ void qshw_xprint(const char *format, ...)
 
 		if (*q == '%')
 		{
-			int t_spec, t_len;
+			int t_spec = -1, t_len = 0;
 			q = qshw_match_format_token(q, &t_spec, &t_len);
 			if (t_spec == -1)
 			{	//! 假定格式符是有效的，不处理该情况
@@ -252,9 +251,7 @@ void qshw_write_prompt(shell_t *psh)
 		printf("\n");
 	}
 
-	qshw_print(QSHW_GREEN, "%s@%s:", psh->user_name, psh->group_name);
-	qshw_print(QSHW_BLUE, psh->workdir);
-	qshw_print(QSHW_WHITE, "$ ");
+	qshw_xprint("\x02\032%s@%s:\x02\033%s\x02\030$ ", psh->user_name, psh->group_name, psh->workdir);
 
 	fflush(stdout);
 }
