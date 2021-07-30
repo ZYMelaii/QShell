@@ -2,32 +2,32 @@
 
 #include "eval.h"
 
-#define MASK_ALL      0xffff //! ×Ö·û´úÂëÇøÓò
+#define MASK_ALL      0xffff //! å­—ç¬¦ä»£ç åŒºåŸŸ
 
-//#- ·ÖÀàÂë -
-#define MASK_CTRL     0x8000 //! ¿ØÖÆ×Ö·û
-#define MASK_FN       0x4000 //! ÆäËû¹¦ÄÜ×Ö·û
-#define MASK_DIGIT    0x2000 //! Êı×Ö
-#define MASK_ALPHABET 0x1000 //! ×ÖÄ¸
+//#- åˆ†ç±»ç  -
+#define MASK_CTRL     0x8000 //! æ§åˆ¶å­—ç¬¦
+#define MASK_FN       0x4000 //! å…¶ä»–åŠŸèƒ½å­—ç¬¦
+#define MASK_DIGIT    0x2000 //! æ•°å­—
+#define MASK_ALPHABET 0x1000 //! å­—æ¯
 
-//#- ÊôĞÔÂë -
-#define MASK_SYMBOL   0x0100 //! ¿ÉÓÃÓÚ·ûºÅÃüÃû
-#define MASK_ESCAPE   0x0200 //! ÌØÊâ×Ö·û
-#define MASK_QUOTE    0x0400 //! ÒıºÅ
-#define MASK_BRACKET  0x0800 //! À¨ºÅ
+//#- å±æ€§ç  -
+#define MASK_SYMBOL   0x0100 //! å¯ç”¨äºç¬¦å·å‘½å
+#define MASK_ESCAPE   0x0200 //! ç‰¹æ®Šå­—ç¬¦
+#define MASK_QUOTE    0x0400 //! å¼•å·
+#define MASK_BRACKET  0x0800 //! æ‹¬å·
 
-//#- ±àºÅÂë -
-#define MASK_ID       0x00ff //! ×Ö·û×éÄÚ´úÂë
+//#- ç¼–å·ç  -
+#define MASK_ID       0x00ff //! å­—ç¬¦ç»„å†…ä»£ç 
 
 #define SMASK(code, mask) (((code)&MASK_ALL)&mask)
 
 //#- chrmap.c -
 extern int *_chr_code_map;
 
-#define T_DEFAULT //! ³£¹æ
-#define T_SYMBOL  //! ·ûºÅ
-#define T_QUOTE   //! ÒıÓÃ
-#define T_VAR     //! ±äÁ¿
+#define T_DEFAULT 0 //! å¸¸è§„
+#define T_SYMBOL  1 //! ç¬¦å·
+#define T_QUOTE   2 //! å¼•ç”¨
+#define T_VAR     3 //! å˜é‡
 
 typedef struct _token_s
 {
