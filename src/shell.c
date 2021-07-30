@@ -15,18 +15,18 @@ char** qsh_stroke(char **ps, const char *s, const char *delim)
 {
 	*ps = qsh_strdup(s);
 
-    strtok(*ps, delim);
+	strtok(*ps, delim);
 	int i = 1;
-    while (strtok(NULL, delim)) { ++i; }
+	while (strtok(NULL, delim)) { ++i; }
 
-    char **vs = qsh_malloc(sizeof(char*) * (i + 1));
+	char **vs = qsh_malloc(sizeof(char*) * (i + 1));
 
-    strcpy(*ps, s);
-    vs[i = 0] = strtok(*ps, delim);
-    while (vs[++i] = strtok(NULL, delim));
-    vs[i] = NULL;
+	strcpy(*ps, s);
+	vs[i = 0] = strtok(*ps, delim);
+	while (vs[++i] = strtok(NULL, delim));
+	vs[i] = NULL;
 
-    return vs;
+	return vs;
 }
 
 int main(int argc, char const *argv[])
