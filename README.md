@@ -1,8 +1,12 @@
 # QShell
 轻型跨平台shell终端。
 
-#### 使用QShell环境
-```c 
+#### - 使用QShell环境
+```c
+#include <qsh/core.h>
+#include <qsh/eval.h>
+#include <qsh/qshw.h>
+
 int main(int argc, char *argv[])
 {
     shell_t sh;
