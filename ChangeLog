@@ -1,6 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.0.2.4] - 2021-7-30
+### Added
+- source `chrmap.c`
+- source `mmem.c`
+- function `qsh_malloc`,`qsh_free` [instead of `malloc`,`free`] (from `mmem.c`)
+- function `qshw_xprint` [enforce `qshw_print`, allows inline color code] (from `qshw.c`)
+- draft of relative structures for parser (from `parser.c`)
+- unsafe exec procedure (from `shell.c`)
+### Changed
+- enpower QShell [enable execute eternal programs] (from `shell.c`)
+
 ## [0.0.2.1] - 2021-7-29
 ### Added
 - document `struct`
@@ -17,7 +28,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - unnecessary fragments in `shell.c` have been wrapped in functions `qshui_setup`,`qshui_cleanup`,`qshui_exit` [allow interruptive conditions] (from `uiman.c`)
 ### Fixed
-- function `qsh_close` [logic error] （from `shellio.c`）
+- function `qsh_close` [logic error] (from `shellio.c`)
 
 ## [0.0.1.4] - 2021-7-28
 ### Fixed
