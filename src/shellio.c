@@ -16,7 +16,7 @@ int qsh_open(shell_t *psh)
 	memset(psh, 0, sizeof(shell_t));
 
 	psh->user_name = qsh_strdup("ZYmelaii");
-	psh->group_name = qsh_strdup("admin");
+	psh->group_name = qsh_strdup("localhost");
 	psh->bLogin = 1;
 
 	char buf[MAX_PATH];

@@ -7,6 +7,9 @@
 
 void qshw_vprint(int color, const char *format, va_list args)
 {
+
+	if (strlen(format) == 0) return;
+
 	WORD colorCode[] = {
 		FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE, // white
 		FOREGROUND_RED, // red
@@ -45,7 +48,7 @@ void qshw_print(int color, const char *format, ...)
 	va_end(args);
 }
 
-const char* qshw_match_format_token(const char *s, int *t_len, int *t_spec)
+const char* qshw_match_format_token(const char *s, int *t_spec, int *t_len)
 {	//! 返回一个完整token的末尾，本函数假定给定字符串是有效的。
 	/********************************
 	 * ┌────────┬───────────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -134,21 +137,108 @@ void qshw_xprint(const char *format, ...)
 	int color = 0;
 
 	char *s = qsh_strdup(format);
-	char *p = s, *q = p;
+	char *p = s; //! 字符串起始指针
+	char *q = p; //! 字符串末尾指针
+
+	int b_quit = 0;
 	while (1)
 	{
-		if (*q == '\x02')
-		{
+		if (*q == '\x02' || *q == '\0')
+		{	//! 输出前一轮的字符串并更新颜色代码
+			if (*q == '\0') b_quit = 1;
 			*q = '\0';
-			if (p == s)
-			{	//! 开头字符未设置颜色，默认按白色输出
-				va_copy(v, tmp);
-				qshw_vprint(color, p, v);
-			}
-			color = *++q;
+
+			va_copy(v, tmp);
+			qshw_vprint(color, p, v);
+			va_end(v);
+
+			if (b_quit) break;
+
+			color = (int)*++q;
 			p = ++q;
 		}
+
+		if (*q == '%')
+		{
+			int t_spec, t_len;
+			q = qshw_match_format_token(q, &t_spec, &t_len);
+			if (t_spec == -1)
+			{	//! 假定格式符是有效的，不处理该情况
+
+			} else if (t_spec == 0)
+			{	//! %%
+
+			} else
+			{
+				switch (t_spec)
+				{
+					case 1: //! d i
+					{
+						switch (t_len)
+						{
+							case 1: { va_arg(tmp, short int); break; } //! h
+							case 2: { va_arg(tmp, signed char); break; } //! hh
+							case 3: { va_arg(tmp, long int); break; } //! l
+							case 4: { va_arg(tmp, long long int); break; } //! ll
+							case 5: { va_arg(tmp, intmax_t); break; } //! j
+							case 6: { va_arg(tmp, size_t); break; } //! z
+							case 7: { va_arg(tmp, ptrdiff_t); break; } //! t
+							default:  { va_arg(tmp, int); break; } //! (none) L
+						}
+						break;
+					}
+					case 2: //! u o x X
+					{
+						switch (t_len)
+						{
+							case 1: { va_arg(tmp, unsigned short int); break; } //! h
+							case 2: { va_arg(tmp, unsigned char); break; } //! hh
+							case 3: { va_arg(tmp, unsigned long int); break; } //! l
+							case 4: { va_arg(tmp, unsigned long long int); break; } //! ll
+							case 5: { va_arg(tmp, uintmax_t); break; } //! j
+							case 6: { va_arg(tmp, size_t); break; } //! z
+							case 7: { va_arg(tmp, ptrdiff_t); break; } //! t
+							default:  { va_arg(tmp, unsigned int); break; } //! (none) L
+						}
+						break;
+					}
+					case 3: //! f F e E g G a A
+					{
+						switch (t_len)
+						{
+							case 8: { va_arg(tmp, long double); break; } //! L
+							default:  { va_arg(tmp, double); break; } //! (none) h hh l ll j z t
+						}
+						break;
+					}
+					case 4: //! c
+					{
+						switch (t_len)
+						{
+							case 3: { va_arg(tmp, wint_t); break; } //! l
+							default:  { va_arg(tmp, int); break; } //! (none) h hh ll j z t L
+						}
+						break;
+					}
+					case 5: //! s
+					case 6: //! p
+					case 7: //! n
+					{
+						switch (t_len)
+						{
+							default:  { va_arg(tmp, void*); break; } //! (none) h hh l ll j z t L
+						}
+						break;
+					}
+				}
+			}
+		}
+
+		++q;
 	}
+
+	va_end(tmp);
+
 	qsh_free(s);
 }
 

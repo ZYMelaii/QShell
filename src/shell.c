@@ -64,7 +64,9 @@ int _qsh_exec(cmd_t *pc)
 		pc->succeed = -1;
 		if (errno == ECHILD)
 		{
-			qshw_print(QSHW_WHITE, "QShell: `%s` command not found.\n", pc->cmd);
+			// qshw_print(QSHW_WHITE, "QShell: `%s` command not found.\n", pc->cmd);
+			qshw_xprint("\x02\001QShell: `%s` command not found.\n", pc->cmd);
+			// qshw_xprint("S: \x02\001[ERROR] \x02\000this is a trick.\n");
 		} else if (errno == EINVAL)
 		{
 			//! IGNORE
