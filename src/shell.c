@@ -112,10 +112,6 @@ int main(int argc, char const *argv[])
 {
 	qshui_setup(QSH_CUI);
 
-	qshw_xprint(
-        "QShell: \x02\033[TEST]\x02\035 Hello \x02\032World\x02\031! "
-        "\x02\030- from user \x02\034`%s`\n", "ZYmelaii");
-
 	shell_t sh;
 	qsh_open(&sh);
 
