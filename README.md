@@ -65,13 +65,17 @@ int main(int argc, char *argv[])
 int main()
 {
     qshw_xprint(
-        "QShell: \x02\033TEST\x02\035 Hello \x02\032World\x02\031! "
+        "QShell: \x02\033[TEST]x02\035 Hello \x02\032World\x02\031! "
         "\x02\030- from user \x02\034`%s`", "ZYmelaii");
     return 0;
 }
 ```
-使用"\x02\03d"作为颜色代码，其中'd'的可选值有以下:
-<table align="center">
+其中"\x02\03d"为颜色代码，'d'的可选值有以下:
+
+<table align="center" height="200">
+    <tr>
+        <th colspan="6">颜色代码</th>
+    </tr>
     <tr>
         <td colspan="6" align="center">白色</td>
     </tr>
