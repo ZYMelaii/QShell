@@ -20,9 +20,11 @@ qsh_open(&sh);
 6. `QShell`主程序
 - `QSH_RAW`模式<br>
   - 装载命令
-```c
-
-```
+  - 去转义化
+  - 变量替换
+  - 命令替换
+  - 模式提取
+  - 执行
 - `QSH_CUI`模式
 ```c
 qsh_mainloop(&sh);

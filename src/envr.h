@@ -8,10 +8,6 @@ typedef struct _sstrmap_s
 	void *data; //! 由 hashmap.c var.c 管理
 } sstrmap_t;
 
-//#- hashmap.c -
-
-//#- var.c -
-
 /********************************
  * @author: ZYmelaii
  *
@@ -55,5 +51,15 @@ typedef struct _context_s
 	struct _context_s *parent; //! 父级上下文
 	struct _context_s *root; //! 根环境
 } context_t;
+
+//#- hashmap.c -
+
+
+//#- var.c -
+void qsh_var_new    (context_t *ctx, const char *key); //! 创建变量
+void qsh_var_delete (context_t *ctx, const char *key); //! 销毁变量
+void qsh_var_ref    (context_t *ctx, const char *key, const char **pref); //! 得到变量的值引用
+void qsh_var_write  (context_t *ctx, const char *key, const char *value); //! 写入变量
+// void qsh_var_setattr(context_t *ctx, const char *key, int attr); //! 设置变量属性
 
 #endif
