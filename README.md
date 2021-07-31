@@ -58,3 +58,44 @@ int main(int argc, char *argv[])
     return (~0);
 }
 ```
+
+#### - 使用嵌入颜色代码的输出函数
+```c
+#include <qsh/qshw.h>
+int main()
+{
+    qshw_xprint(
+        "QShell: \x02\033[TEST]x02\035 Hello \x02\032World\x02\031! "
+        "\x02\030- from user \x02\034`%s`", "ZYmelaii");
+    return 0;
+}
+```
+其中"\x02\03d"为颜色代码，'d'的可选值有以下:
+
+<table align="center" height="200">
+    <tr>
+        <th colspan="6">颜色代码</th>
+    </tr>
+    <tr>
+        <td colspan="6" align="center">白色</td>
+    </tr>
+    <tr>
+        <td colspan="6" align="center">0</td>
+    </tr>
+    <tr>
+        <td align="center">红色</td>
+        <td align="center">绿色</td>
+        <td align="center">蓝色</td>
+        <td align="center">黄色</td>
+        <td align="center">品红色</td>
+        <td align="center">青色</td>
+    <tr>
+    <tr>
+        <td align="center">1</td>
+        <td align="center">2</td>
+        <td align="center">3</td>
+        <td align="center">4</td>
+        <td align="center">5</td>
+        <td align="center">6</td>
+    <tr>
+</table>
