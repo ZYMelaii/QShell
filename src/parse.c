@@ -22,7 +22,7 @@
 #define SMASK(code, mask) (((code)&MASK_ALL)&mask)
 
 //#- chrmap.c -
-extern int *_chr_code_map;
+extern int _chr_code_map[256];
 
 #define T_DEFAULT 0 //! ³£¹æ
 #define T_SYMBOL  1 //! ·ûºÅ

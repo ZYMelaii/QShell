@@ -1,52 +1,88 @@
 #include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "eval.h"
+#include "qshw.h"
 
-#define NEW_BUILTIN(func, psh, pc) void qsh_builtin_##func(shell_t *psh, cmd_t *pc)
+#define NEW_BUILTIN(func, pc) void qsh_builtin_##func(cmd_t *pc)
 
-NEW_BUILTIN(help, psh, pc)
+NEW_BUILTIN(help, pc)
 {
-	assert(psh != NULL);
-	assert(psh->bValid == 1);
 	assert(pc != NULL);
-
-}
-NEW_BUILTIN(exit, psh, pc)
-{
-	assert(psh != NULL);
-	assert(psh->bValid == 1);
-	assert(pc != NULL);
+	assert(pc->root != NULL);
+	assert(pc->root->bValid == 1);
 
 }
 
-NEW_BUILTIN(echo, psh, pc)
+NEW_BUILTIN(exit, pc)
 {
-	assert(psh != NULL);
-	assert(psh->bValid == 1);
 	assert(pc != NULL);
+	assert(pc->root != NULL);
+	assert(pc->root->bValid == 1);
+
+	if (pc->argc > 2)
+	{
+		qshw_xprint("QShell: `exit` too many arguments\n");
+	}
+
+	int exitCode = 0;
+
+	if (pc->argc >= 2)
+	{
+		exitCode = atoi(pc->argv[1]);
+		if (exitCode == 0)
+		{
+			char *p = pc->argv[1];
+			int err = 0;
+			while (*p != '\0')
+			{
+				if (*p++ != '0')
+				{
+					err = 1;
+					break;
+				}
+			}
+			if (err)
+			{
+				qshw_xprint("QShell: `exit` passing invalid exit code (%s)\n", pc->argv[1]);
+				exitCode = -1;
+			}
+		}
+	}
+
+	qshui_exit(exitCode);
+}
+
+NEW_BUILTIN(echo, pc)
+{
+	assert(pc != NULL);
+	assert(pc->root != NULL);
+	assert(pc->root->bValid == 1);
 
 }
 
-NEW_BUILTIN(clear, psh, pc)
+NEW_BUILTIN(clear, pc)
 {
-	assert(psh != NULL);
-	assert(psh->bValid == 1);
 	assert(pc != NULL);
+	assert(pc->root != NULL);
+	assert(pc->root->bValid == 1);
+
+	system("cls");
+}
+
+NEW_BUILTIN(cd, pc)
+{
+	assert(pc != NULL);
+	assert(pc->root != NULL);
+	assert(pc->root->bValid == 1);
 
 }
 
-NEW_BUILTIN(cd, psh, pc)
+NEW_BUILTIN(pwd, pc)
 {
-	assert(psh != NULL);
-	assert(psh->bValid == 1);
 	assert(pc != NULL);
-
-}
-
-NEW_BUILTIN(pwd, psh, pc)
-{
-	assert(psh != NULL);
-	assert(psh->bValid == 1);
-	assert(pc != NULL);
+	assert(pc->root != NULL);
+	assert(pc->root->bValid == 1);
 
 }

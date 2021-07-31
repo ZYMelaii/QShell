@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -7,13 +8,19 @@
 #include "uiman.h"
 #include "qshw.h"
 
-static int _qsh_global_counter = 0;
-static void *_qsh_global_ptr = NULL;
-static int _qsh_global_ui_status = 0;
+static int _qshg_counter = 0;
+static void *_qshg_ptr = NULL;
+static int _qshg_ui_status = 0;
+static int _qshg_ui_mode = 0;
 
 void qshuis_disable_ctrl_c()
 {
-	signal(SIGINT, SIG_IGN); // ignore ctrl+c
+	signal(SIGINT, SIG_IGN); //! ignore ctrl+c
+}
+
+void qshuis_enable_ctrl_c()
+{
+	signal(SIGINT, SIG_DFL); //! restore ctrl+c
 }
 
 void qshuis_disable_con_close()
@@ -41,8 +48,8 @@ BOOL WINAPI qshuis_con_handler(DWORD event)
 		case CTRL_LOGOFF_EVENT: //! user logout
 		case CTRL_SHUTDOWN_EVENT: //! system shutdown
 		{
-			qshui_exit();
-			printf("QShell: interrupted & safely quited.\n");
+			qshui_exit(0);
+			qshw_xprint("QShell: iinterrupted and safely quted.\n");
 			return TRUE;
 		}
 		case CTRL_C_EVENT: // ctrl+c signal
@@ -53,56 +60,102 @@ BOOL WINAPI qshuis_con_handler(DWORD event)
 	return FALSE;
 }
 
-void qshui_setup()
+void qshui_setup(int mode)
 {
-	//! init global vars
-	_qsh_global_ptr = NULL;
-	_qsh_global_ui_status = 1;
-
-	//! config winform
-	qshuis_disable_ctrl_c();
-	// qshuis_disable_con_close();
-
-	//! config handler
-	if (SetConsoleCtrlHandler(qshuis_con_handler, TRUE) == 0)
+	if (mode != QSH_RAW && mode != QSH_CUI && mode != QSH_GUI)
 	{
-		qshw_print(QSHW_RED, "[ERROR] failure@SetConsoleCtrlHandler\n");
+		qshw_xprint("QShell: \x02\031[WARNING] \x02\030unknown ui mode [%d]\n", mode);
+		return;
+	}
+	
+	if (_qshg_ui_status == 1)
+	{
+		qshw_xprint("QShell: \x02\031[WARNING] \x02\030ui envriment has setted\n");
+		return;
+	}
+
+	//! init global vars
+	_qshg_ptr = NULL;
+	_qshg_ui_status = 1;
+
+	switch (mode)
+	{
+		case QSH_RAW:
+		{
+			break;
+		}
+		case QSH_CUI:
+		{
+			//! disable ctrl-c signal
+			qshuis_disable_ctrl_c();
+			//! config handler
+			if (SetConsoleCtrlHandler(qshuis_con_handler, TRUE) == 0)
+			{
+				qshw_xprint("QShell: \x02\031[ERROR] \x02\030failure@SetConsoleCtrlHandler\n");
+				qshw_xprint("QShell: safely quited.\n");
+				qshui_exit(-QSH_CUI);
+			}
+			break;
+		}
+		case QSH_GUI:
+		{
+			qshw_xprint("QShell: \x02\033[WARNING] \x02\030forbidden@qshui_setup(QSH_GUI)\n");
+			qshw_xprint("QShell: safely quited.\n");
+			qshui_exit(-QSH_GUI);
+			break;
+		}
 	}
 }
 
 void qshui_cleanup()
 {
-	if (_qsh_global_ui_status == 1)
+	if (_qshg_ui_status == 1)
 	{
-		if (_qsh_global_ptr != NULL && _qsh_global_counter > 0)
+		if (_qshg_ptr != NULL && _qshg_counter > 0)
 		{
-			qsh_close((shell_t*)_qsh_global_ptr);
-			_qsh_global_ptr = NULL;
-			--_qsh_global_counter;
+			qsh_close((shell_t*)_qshg_ptr);
+			_qshg_ptr = NULL;
+			--_qshg_counter;
 		}
-		_qsh_global_ui_status = 0;
+		_qshg_ui_status = 0;
 	}
 }
 
-void qshui_exit()
+void qshui_exit(int exitCode)
 {
 	//! cleanup
 	qshui_cleanup();
-	if (_qsh_global_counter != 0)
+
+	if (_qshg_counter != 0)
 	{
-		// printf("[WARNING] unexcepted exception");
+		qshw_xprint("QShell: [WARNING] unexcepted-exception@qshui_exit\n");
 	}
 
 	//! restore
-	// qshuis_enable_con_close();
-	SetConsoleCtrlHandler(NULL, FALSE);
+	switch (_qshg_ui_mode)
+	{
+		case QSH_RAW:
+		{
+			break;
+		}
+		case QSH_CUI:
+		{
+			qshuis_enable_ctrl_c();
+			SetConsoleCtrlHandler(NULL, FALSE);
+			break;
+		}
+		case QSH_GUI:
+		{
+			break;
+		}
+	}
 
 	//! exit
-	exit(0);
+	exit(exitCode);
 }
 
 void qshui_set_global_ptr(void *ptr)
 {
-	_qsh_global_ptr = ptr;
-	++_qsh_global_counter;
+	_qshg_ptr = ptr;
+	++_qshg_counter;
 }

@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.0.2.5] - 2021-7-21
+### Changed
+- module QShell UI [pre-enable extensions] (from `shell.c`,`uiman.c`)
+- detailed builtin cmd `exit`,`clear` (from `builtin.c`)
+
 ## [0.0.2.4] - 2021-7-30
 ### Added
 - source `chrmap.c`

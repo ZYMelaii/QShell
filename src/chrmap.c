@@ -15,7 +15,7 @@
 //#- 编号码 -
 #define MASK_ID       0x00ff //! 字符组内代码
 
-static int _chr_code_map[256] =
+int _chr_code_map[256] =
 {
 	MASK_CTRL | 0x01,                          // 0   0x00 NUL (NULL)
 	MASK_CTRL,                                 // 1   0x01 SOH (Start Of Headling)

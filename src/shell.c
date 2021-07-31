@@ -11,7 +11,7 @@
 #include "qshw.h"
 #include "uiman.h"
 
-char** qsh_stroke(char **ps, const char *s, const char *delim)
+char** qsh_stroke(char **ps, int *num, const char *s, const char *delim)
 {
 	*ps = qsh_strdup(s);
 
@@ -26,6 +26,8 @@ char** qsh_stroke(char **ps, const char *s, const char *delim)
 	while (vs[++i] = strtok(NULL, delim));
 	vs[i] = NULL;
 
+	*num = i;
+
 	return vs;
 }
 
@@ -38,7 +40,7 @@ cmd_t* qsh_make_cmd(shell_t *psh, const char *cmdline)
 
 	pc->root = psh;
 	psh->prev_cmd = pc;
-	pc->argv = qsh_stroke(&pc->args, cmdline, " ");
+	pc->argv = qsh_stroke(&pc->args, &pc->argc, cmdline, " ");
 	pc->cmd = pc->argv[0];
 }
 
@@ -65,57 +67,59 @@ int _qsh_exec(cmd_t *pc)
 		if (errno == ECHILD)
 		{
 			// qshw_print(QSHW_WHITE, "QShell: `%s` command not found.\n", pc->cmd);
-			qshw_xprint("\x02\001QShell: `%s` command not found.\n", pc->cmd);
+			qshw_xprint("QShell: \x02\031`%s` command not found.\n", pc->cmd);
 			// qshw_xprint("S: \x02\001[ERROR] \x02\000this is a trick.\n");
 		} else if (errno == EINVAL)
 		{
 			//! IGNORE
 		} else
 		{
-			qshw_print(QSHW_WHITE, "QShell: ");
-			qshw_print(QSHW_RED, "unknown error.");
+			qshw_xprint("QShell: \x02\031[ERROR] \x02\030unknown error\n");
 		}
 		return (~0);
 	} else
 	{
 		pc->succeed = 1;
-		printf("QShell: `%s` exit with %d.\n", pc->cmd, pc->ret_code);
+		qshw_xprint("QShell: `%s` exit with %d.\n", pc->cmd, pc->ret_code);
+	}
+}
+
+void qsh_mainloop(shell_t *psh)
+{
+	while (1)
+	{
+		qshw_write_prompt(psh);
+		qsh_readline(psh);
+		const char *cmdline = qsh_get_cmdline(psh);
+		if (cmdline != NULL)
+		{
+			cmd_t *pc = qsh_make_cmd(psh, cmdline);
+			if (strcmp(pc->cmd, "exit") == 0)
+			{
+				qsh_builtin_exit(pc);
+			} else if (strcmp(pc->cmd, "clear") == 0)
+			{
+				qsh_builtin_clear(pc);
+			} else
+			{
+				_qsh_exec(pc);
+			}
+		}
 	}
 }
 
 int main(int argc, char const *argv[])
 {
-	qshui_setup();
+	qshui_setup(QSH_CUI);
 
 	shell_t sh;
 	qsh_open(&sh);
 
-	while (1)
-	{
-		qshw_write_prompt(&sh);
-		qsh_readline(&sh);
-		const char *cmdline = qsh_get_cmdline(&sh);
-		if (cmdline != NULL)
-		{
-			//#- Add eval.. procedure here -
-			if (strcmp(cmdline, "exit") == 0)
-			{
-				break;
-			} else if (strcmp(cmdline, "clear") == 0)
-			{
-				system("cls");
-			} else
-			{
-				qsh_make_cmd(&sh, cmdline);
-				_qsh_exec(sh.prev_cmd);
-			}
-			//#- ENDLINE -
-		}
-	}
+	qsh_mainloop(&sh);
 
 	qsh_close(&sh);
 
-	qshui_exit();
+	qshui_exit(0);
 
 	// QShell should never reach here
 	return -1;
