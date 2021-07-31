@@ -6,9 +6,12 @@
 #include <qsh/core.h>
 #include <qsh/eval.h>
 #include <qsh/qshw.h>
+#include <qsh/uiman.h>
 
 int main(int argc, char *argv[])
 {
+    qshui_setup(QSH_RAW); //! 搭建环境，使用内嵌模式
+
     shell_t sh;
     qsh_open(&sh); //! 创建QShell对象
 
@@ -48,6 +51,10 @@ int main(int argc, char *argv[])
     //! TODO 3
 
     qsh_close(&sh); //! 销毁QShell
-    return cmd;
+
+    qshui_exit(0); //! 销毁环境并退出
+
+    //! QShell should never reach here
+    return (~0);
 }
 ```
