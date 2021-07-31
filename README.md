@@ -1,7 +1,7 @@
 # QShell
 轻型跨平台shell终端。
 
-#### - 使用QShell环境
+#### + 使用QShell环境
 ```c
 #include <qsh/core.h>
 #include <qsh/eval.h>
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-#### - 使用嵌入颜色代码的输出函数
+#### + 使用嵌入颜色代码的输出函数
 ```c
 #include <qsh/qshw.h>
 int main()
