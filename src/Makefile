@@ -5,7 +5,11 @@ CXX := g++
 AR := ar
 CFLAGS := -w -I. -L. -L..\build
 
-LIB_OBJS := shellio.o mmem.o envr.o var.o cmdline.o builtin.o parse.o chrmap.o uiman.o qshw.o
+LIB_OBJS := shellio.o mmem.o \
+	envr.o hashmap.o var.o \
+	cmdline.o builtin.o parse.o chrmap.o \
+	uiman.o \
+	qshw.o
 
 .SUFFIXES: .c .cpp
 
@@ -29,7 +33,7 @@ move:
 
 core.obj: shellio.o mmem.o core.h
 
-envr.obj: envr.o var.o envr.h
+envr.obj: envr.o hashmap.o var.o envr.h
 
 cmdline.obj: cmdline.o cmdline.h
 
