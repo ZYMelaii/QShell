@@ -2,9 +2,9 @@ dependency-diagram:
 + core.h:
 	- shellio.c
 	- mmem.c
+	- hashmap.c
 + envr.h:
 	- envr.c
-	- hashmap.c
 	- var.c
 + cmdline.h:
 	- cmdline.c

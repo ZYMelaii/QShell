@@ -31,9 +31,9 @@ move:
 	@if not exist ..\build (mkdir ..\build)
 	mv -f *.o *.exe *.a ..\build
 
-core.obj: shellio.o mmem.o core.h
+core.obj: shellio.o mmem.o hashmap.o core.h
 
-envr.obj: envr.o hashmap.o var.o envr.h
+envr.obj: envr.o var.o envr.h
 
 cmdline.obj: cmdline.o cmdline.h
 

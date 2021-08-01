@@ -13,6 +13,11 @@ void qsh_free(void *ptr)
 	free(ptr);
 }
 
+size_t qsh_msize(void *ptr)
+{
+	return _msize(ptr);
+}
+
 char* qsh_strdup(const char *s)
 {
 	size_t len = strlen(s) + 1;

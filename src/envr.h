@@ -3,10 +3,16 @@
 
 #include "core.h"
 
-typedef struct _sstrmap_s
-{
-	void *data; //! 由 hashmap.c var.c 管理
-} sstrmap_t;
+/********************************
+ *  @author: ZYmelaii
+ *
+ *  @sstrmap_t: intro for sstrmap_t
+ *
+ *  @brief: 字符串对字符串映射哈希表
+ *
+ *  @NOTES: 由`var.c`管理
+ *******************************/
+typedef hashmap_t sstrmap_t;
 
 /********************************
  * @author: ZYmelaii
@@ -52,14 +58,10 @@ typedef struct _context_s
 	struct _context_s *root; //! 根环境
 } context_t;
 
-//#- hashmap.c -
-
-
 //#- var.c -
-void qsh_var_new    (context_t *ctx, const char *key); //! 创建变量
-void qsh_var_delete (context_t *ctx, const char *key); //! 销毁变量
-void qsh_var_ref    (context_t *ctx, const char *key, const char **pref); //! 得到变量的值引用
-void qsh_var_write  (context_t *ctx, const char *key, const char *value); //! 写入变量
-// void qsh_var_setattr(context_t *ctx, const char *key, int attr); //! 设置变量属性
+void qsh_var_new(context_t *ctx, const char *key); //! 创建变量
+void qsh_var_del(context_t *ctx, const char *key); //! 销毁变量
+void qsh_var_get(context_t *ctx, const char *key, const char **pvalue); //! 获取变量值
+void qsh_var_set(context_t *ctx, const char *key, const char *value); //! 写入变量
 
 #endif
