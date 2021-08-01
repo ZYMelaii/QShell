@@ -252,8 +252,6 @@ object_t* qsh_hashmap_write(psm, key, hash, cmp)
  *  @brief: hashmap_t结束键值写入
  *  @param:
  *     # psm: hashmap_t pointer
- *     # key: key value (not necessarily void*)
- *     # hash: hash function
  *  @note: `与qsh_hashmap_write`成对出现
  *  @usage: 
  *  @return:
