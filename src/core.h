@@ -251,7 +251,11 @@ object_t* qsh_hashmap_write(
  *  @author: ZYmelaii
  *  @brief: hashmap_t结束键值写入
  *  @param:
+<<<<<<< HEAD
  *     # phm: hashmap_t pointer
+=======
+ *     # psm: hashmap_t pointer
+>>>>>>> 5b9272c627942fd39adf1e2d9446a174c1cc3c57
  *  @note: `与qsh_hashmap_write`成对出现
  *  @usage: 
  *  @return:
