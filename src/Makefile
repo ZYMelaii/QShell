@@ -3,7 +3,8 @@
 CC := gcc
 CXX := g++
 AR := ar
-CFLAGS := -w -I. -L. -L..\build
+CWARNINGS := -Wall -Wno-discarded-qualifiers -Wno-comment
+CFLAGS := ${CWARNINGS} -I. -L. -L..\build
 
 LIB_OBJS := shellio.o mmem.o \
 	envr.o hashmap.o var.o \
@@ -14,16 +15,16 @@ LIB_OBJS := shellio.o mmem.o \
 .SUFFIXES: .c .cpp
 
 *.c.o:
-	@$(CC) -c $<
+	@${CC} -c $<
 
 *.cpp.o:
-	$(CXX) -c $<
+	${CXX} -c $<
 
 libqsh.a: core.obj envr.obj cmdline.obj eval.obj uiman.obj qshw.obj
-	$(AR) rcs $@ $(LIB_OBJS)
+	${AR} rcs $@ ${LIB_OBJS}
 
 qshell: shell.c libqsh.a
-	$(CC) $< -o $@ -lqsh $(CFLAGS)
+	${CC} $< -o $@ -lqsh ${CFLAGS}
 
 all: libqsh.a qshell move
 
@@ -45,4 +46,5 @@ qshw.obj: qshw.o qshw.h
 
 .PHONY: clean
 clean:
+	-@rm *.o *.a *.exe
 	-@rm -r ..\build

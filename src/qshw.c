@@ -83,7 +83,8 @@ const char* qshw_match_format_token(const char *s, int *t_spec, int *t_len)
 		return p + 1;
 	}
 
-	while (!(*p >= 'a' && *p <= 'z' || *p >= 'A' && *p <= 'Z') && *p != '\0') { ++p; }
+	while (!((*p >= 'a' && *p <= 'z') || (*p >= 'A' && *p <= 'Z'))
+		&& *p != '\0') { ++p; }
 
 	if (*p == '\0')
 	{	//! 无效格式符
@@ -160,7 +161,7 @@ void qshw_xprint(const char *format, ...)
 		if (*q == '%')
 		{
 			int t_spec = -1, t_len = 0;
-			q = qshw_match_format_token(q, &t_spec, &t_len);
+			q = (char*)qshw_match_format_token(q, &t_spec, &t_len);
 			if (t_spec == -1)
 			{	//! 假定格式符是有效的，不处理该情况
 
@@ -175,9 +176,9 @@ void qshw_xprint(const char *format, ...)
 					{
 						switch (t_len)
 						{
-							case 1: { va_arg(tmp, short int); break; } //! h
-							case 2: { va_arg(tmp, signed char); break; } //! hh
-							case 3: { va_arg(tmp, long int); break; } //! l
+							case 1: { va_arg(tmp, int/*short int*/); break; } //! h
+							case 2: { va_arg(tmp, int/*signed char*/); break; } //! hh
+							case 3: { va_arg(tmp, int/*long int*/); break; } //! l
 							case 4: { va_arg(tmp, long long int); break; } //! ll
 							case 5: { va_arg(tmp, intmax_t); break; } //! j
 							case 6: { va_arg(tmp, size_t); break; } //! z
@@ -190,9 +191,9 @@ void qshw_xprint(const char *format, ...)
 					{
 						switch (t_len)
 						{
-							case 1: { va_arg(tmp, unsigned short int); break; } //! h
-							case 2: { va_arg(tmp, unsigned char); break; } //! hh
-							case 3: { va_arg(tmp, unsigned long int); break; } //! l
+							case 1: { va_arg(tmp, unsigned int/*unsigned short int*/); break; } //! h
+							case 2: { va_arg(tmp, unsigned int/*unsigned char*/); break; } //! hh
+							case 3: { va_arg(tmp, unsigned int/*unsigned long int*/); break; } //! l
 							case 4: { va_arg(tmp, unsigned long long int); break; } //! ll
 							case 5: { va_arg(tmp, uintmax_t); break; } //! j
 							case 6: { va_arg(tmp, size_t); break; } //! z
@@ -214,7 +215,7 @@ void qshw_xprint(const char *format, ...)
 					{
 						switch (t_len)
 						{
-							case 3: { va_arg(tmp, wint_t); break; } //! l
+							case 3: { va_arg(tmp, unsigned int/*wint_t*/); break; } //! l
 							default:  { va_arg(tmp, int); break; } //! (none) h hh ll j z t L
 						}
 						break;

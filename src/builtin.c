@@ -4,6 +4,7 @@
 
 #include "eval.h"
 #include "qshw.h"
+#include "uiman.h"
 
 #define NEW_BUILTIN(func, pc) void qsh_builtin_##func(cmd_t *pc)
 
