@@ -185,7 +185,6 @@ inline listnode_t* qsh_hashmap_find(psm, key, hash, cmp)
 		{
 			return node;
 		}
-
 		node = node->next;
 	}
 
