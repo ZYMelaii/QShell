@@ -27,7 +27,7 @@ typedef hashmap_t sstrmap_t;
  * (from `eval.h`), no extra context will be builded.
  * however, if QShell tries to run a statement containing
  * lower-class segment e.g. `if`, `while`, etc. it'll
- * builds a temparary context depriving from current one
+ * build a temparary context depriving from current one
  * and destroy it afterward.
  *
  * @NOTES: 1. not every context will deprive from another one.
