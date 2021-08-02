@@ -31,7 +31,11 @@ typedef struct _object_s { void *data; } object_t;
  *
  *  @NOTES: 
  *******************************/
+<<<<<<< HEAD
 typedef struct _listnode_s
+=======
+struct _listnode_s
+>>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
 {
 	object_t obj;
 	struct _listnode_s *next;
@@ -177,7 +181,11 @@ void qsh_hashmap_free(hashmap_t *phm); //! 销毁哈希表
  *  @author: ZYmelaii
  *  @brief: hashmap_t添加新键
  *  @param:
+<<<<<<< HEAD
  *     # phm: hashmap_t pointer
+=======
+ *     # psm: hashmap_t pointer
+>>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
  *     # key: key value (not necessarily void*)
  *     # hash: hash function
  *     # cmp: compare function
@@ -189,15 +197,25 @@ void qsh_hashmap_free(hashmap_t *phm); //! 销毁哈希表
  *     # 0: done
  *     # 1: key already exists
  *******************************/
+<<<<<<< HEAD
 int qsh_hashmap_add(
 	hashmap_t *phm, void *key,
 	fn_hash_t hash, fn_cmp_t cmp, fn_dup_t dup);
+=======
+int qsh_hashmap_add(psm, key, hash, cmp, dup)
+	hashmap_t *psm, void *key,
+	fn_hash_t hash, fn_cmp_t cmp, fn_dup_t dup;
+>>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
 
 /********************************
  *  @author: ZYmelaii
  *  @brief: hashmap_t删除键
  *  @param:
+<<<<<<< HEAD
  *     # phm: hashmap_t pointer
+=======
+ *     # psm: hashmap_t pointer
+>>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
  *     # key: key value (not necessarily void*)
  *     # hash: hash function
  *     # cmp: compare function
@@ -206,15 +224,25 @@ int qsh_hashmap_add(
  *  @return:
  *     # void: /
  *******************************/
+<<<<<<< HEAD
 void qsh_hashmap_del(
 	hashmap_t *phm, void *key,
 	fn_hash_t hash, fn_cmp_t cmp);
+=======
+void qsh_hashmap_del(psm, key, hash, cmp)
+	hashmap_t *psm, void *key,
+	fn_hash_t hash, fn_cmp_t cmp;
+>>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
 
 /********************************
  *  @author: ZYmelaii
  *  @brief: hashmap_t获取键值
  *  @param:
+<<<<<<< HEAD
  *     # phm: hashmap_t pointer
+=======
+ *     # psm: hashmap_t pointer
+>>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
  *     # key: key value (not necessarily void*)
  *     # hash: hash function
  *     # cmp: compare function
@@ -224,15 +252,25 @@ void qsh_hashmap_del(
  *     # NULL: no such key or key-value is undefined
  *     # ...: done
  *******************************/
+<<<<<<< HEAD
 void* qsh_hashmap_getval(
 	hashmap_t *phm, void *key,
 	fn_hash_t hash, fn_cmp_t cmp);
+=======
+void* qsh_hashmap_getval(psm, key, hash, cmp)
+	hashmap_t *psm, void *key,
+	fn_hash_t hash, fn_cmp_t cmp;
+>>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
 
 /********************************
  *  @author: ZYmelaii
  *  @brief: hashmap_t写入键值
  *  @param:
+<<<<<<< HEAD
  *     # phm: hashmap_t pointer
+=======
+ *     # psm: hashmap_t pointer
+>>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
  *     # key: key value (not necessarily void*)
  *     # hash: hash function
  *     # cmp: compare function
@@ -243,25 +281,39 @@ void* qsh_hashmap_getval(
  *     # NULL: no such key
  *     # ...: done
  *******************************/
+<<<<<<< HEAD
 object_t* qsh_hashmap_write(
 	hashmap_t *phm, void *key,
 	fn_hash_t hash, fn_cmp_t cmp);
+=======
+object_t* qsh_hashmap_write(psm, key, hash, cmp)
+	hashmap_t *psm, void *key,
+	fn_hash_t hash, fn_cmp_t cmp;
+>>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
 
 /********************************
  *  @author: ZYmelaii
  *  @brief: hashmap_t结束键值写入
  *  @param:
 <<<<<<< HEAD
+<<<<<<< HEAD
  *     # phm: hashmap_t pointer
 =======
  *     # psm: hashmap_t pointer
 >>>>>>> 5b9272c627942fd39adf1e2d9446a174c1cc3c57
+=======
+ *     # psm: hashmap_t pointer
+>>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
  *  @note: `与qsh_hashmap_write`成对出现
  *  @usage: 
  *  @return:
  *     # void: /
  *******************************/
+<<<<<<< HEAD
 void qsh_hashmap_done(hashmap_t *phm);
+=======
+void qsh_hashmap_done(hashmap_t *psm);
+>>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
 
 /********************************
  *  @author: ZYmelaii
