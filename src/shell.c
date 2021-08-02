@@ -23,25 +23,12 @@ char** qsh_stroke(char **ps, int *num, const char *s, const char *delim)
 
 	strcpy(*ps, s);
 	vs[i = 0] = strtok(*ps, delim);
-	while (vs[++i] = strtok(NULL, delim));
+	while ((vs[++i] = strtok(NULL, delim)));
 	vs[i] = NULL;
 
 	*num = i;
 
 	return vs;
-}
-
-cmd_t* qsh_make_cmd(shell_t *psh, const char *cmdline)
-{
-	cmd_t *pc = qsh_malloc(sizeof(cmd_t));
-	memset(pc, 0, sizeof(cmd_t));
-
-	qsh_cmd_free(psh->prev_cmd);
-
-	pc->root = psh;
-	psh->prev_cmd = pc;
-	pc->argv = qsh_stroke(&pc->args, &pc->argc, cmdline, " ");
-	pc->cmd = pc->argv[0];
 }
 
 void qsh_cmd_free(cmd_t *pc)
@@ -55,11 +42,26 @@ void qsh_cmd_free(cmd_t *pc)
 	qsh_free(pc);
 }
 
+cmd_t* qsh_make_cmd(shell_t *psh, const char *cmdline)
+{
+	cmd_t *pc = qsh_malloc(sizeof(cmd_t));
+	memset(pc, 0, sizeof(cmd_t));
+
+	qsh_cmd_free(psh->prev_cmd);
+
+	pc->root = psh;
+	psh->prev_cmd = pc;
+	pc->argv = qsh_stroke(&pc->args, &pc->argc, cmdline, " ");
+	pc->cmd = pc->argv[0];
+
+	return pc;
+}
+
 int _qsh_exec(cmd_t *pc)
 {
 	_flushall();
 	intptr_t hproc = spawnvp(_P_NOWAIT, pc->cmd, pc->argv);
-	intptr_t hd = cwait(&pc->ret_code, hproc, NULL);
+	intptr_t hd = cwait(&pc->ret_code, hproc, 0);
 
 	if (hd == -1)
 	{
@@ -67,7 +69,7 @@ int _qsh_exec(cmd_t *pc)
 		if (errno == ECHILD)
 		{
 			// qshw_print(QSHW_WHITE, "QShell: `%s` command not found.\n", pc->cmd);
-			qshw_xprint("QShell: \x02\031`%s` command not found.\n", pc->cmd);
+			qshw_xprint("QShell: \x02\031`%s` \x02\030command not found.\n", pc->cmd);
 			// qshw_xprint("S: \x02\001[ERROR] \x02\000this is a trick.\n");
 		} else if (errno == EINVAL)
 		{
@@ -82,6 +84,8 @@ int _qsh_exec(cmd_t *pc)
 		pc->succeed = 1;
 		qshw_xprint("QShell: `%s` exit with %d.\n", pc->cmd, pc->ret_code);
 	}
+
+	return pc->ret_code;
 }
 
 void qsh_mainloop(shell_t *psh)

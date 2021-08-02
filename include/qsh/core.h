@@ -12,13 +12,66 @@ typedef int32_t return_t;
 
 /********************************
  *  @author: ZYmelaii
+ *
+ *  @object_t: intro for object_t
+ *
+ *  @brief: 通用对象结构
+ *
+ *  @NOTES: 1. 由相关接口管理具体内容
+ *     2. 要求`object_t::data`由`qsh_malloc`分配内存空间并由`qsh_free`释放
+ *******************************/
+typedef struct _object_s { void *data; } object_t;
+
+/********************************
+ *  @author: ZYmelaii
+ *
+ *  @listnode_t: intro for listnode_t
+ *
+ *  @brief: 链表节点
+ *
+ *  @NOTES: 
+ *******************************/
+typedef struct _listnode_s
+{
+	object_t obj;
+	struct _listnode_s *next;
+} listnode_t;
+
+/********************************
+ *  @author: ZYmelaii
+ *
+ *  @pair_t: intro for pair_t
+ *
+ *  @brief: hashmap_t元素
+ *
+ *  @NOTES: 
+ *******************************/
+typedef struct _pair_s
+{
+	void *key;
+	void *value;
+} pair_t;
+
+/********************************
+ *  @author: ZYmelaii
+ *
+ *  @hashmap_t: intro for hashmap_t
+ *
+ *  @brief: 哈希表
+ *
+ *  @NOTES: 1. 由`hashmap.c`管理
+ *     2. 内部使用`listnode_t`结构
+ *******************************/
+typedef object_t hashmap_t;
+
+/********************************
+ *  @author: ZYmelaii
+ *
+ *  @shell_t: intro for shell_t
+ *
  *  @brief: 核心QShell对象
- *  @param:
- *     # void: /
- *  @note: 
- *  @usage: 
- *  @return:
- *     # void: /
+ *
+ *  @NOTES: 
  *******************************/
 struct _shell_s
 {
@@ -79,13 +132,12 @@ typedef struct _shell_s shell_t;
 
 /********************************
  *  @author: ZYmelaii
+ *
+ *  @cmd_t: intro for cmd_t
+ *
  *  @brief: 标准指令对象
- *  @param:
- *     # void: /
- *  @note: 
- *  @usage: 
- *  @return:
- *     # void: /
+ *
+ *  @NOTES: 
  *******************************/
 struct _cmd_s
 {
@@ -97,6 +149,7 @@ struct _cmd_s
 	 *     # {..., NULL}: /
 	 *******************************/
 	char **argv; //! 命令参数
+	int argc; //! 命令参数数量
 	char *args; //! 命令参数源字符串
 	/********************************
 	 *  @object: succeed -> int
@@ -109,6 +162,118 @@ struct _cmd_s
 	return_t ret_code; //! 返回值
 };
 typedef struct _cmd_s cmd_t;
+
+//#- hashmap.c -
+
+#define QSH_HASH_MAX 1024 //! 哈希表大小上限
+typedef uint32_t (*fn_hash_t)(void *key); //! 通用哈希函数类型
+typedef int (*fn_cmp_t)(void *x, void *y); //! 通用匹配函数类型 (x == y -> return 0)
+typedef void* (*fn_dup_t)(const void *src); //! 通用副本生成函数类型
+
+void qsh_hashmap_init(hashmap_t *phm, size_t size); //! 创建哈希表
+void qsh_hashmap_free(hashmap_t *phm); //! 销毁哈希表
+
+/********************************
+ *  @author: ZYmelaii
+ *  @brief: hashmap_t添加新键
+ *  @param:
+ *     # phm: hashmap_t pointer
+ *     # key: key value (not necessarily void*)
+ *     # hash: hash function
+ *     # cmp: compare function
+ *     # dup: duplicate function
+ *  @note: 
+ *  @usage: 
+ *  @return:
+ *     # -1: failed
+ *     # 0: done
+ *     # 1: key already exists
+ *******************************/
+int qsh_hashmap_add(
+	hashmap_t *phm, void *key,
+	fn_hash_t hash, fn_cmp_t cmp, fn_dup_t dup);
+
+/********************************
+ *  @author: ZYmelaii
+ *  @brief: hashmap_t删除键
+ *  @param:
+ *     # phm: hashmap_t pointer
+ *     # key: key value (not necessarily void*)
+ *     # hash: hash function
+ *     # cmp: compare function
+ *  @note: 
+ *  @usage: 
+ *  @return:
+ *     # void: /
+ *******************************/
+void qsh_hashmap_del(
+	hashmap_t *phm, void *key,
+	fn_hash_t hash, fn_cmp_t cmp);
+
+/********************************
+ *  @author: ZYmelaii
+ *  @brief: hashmap_t获取键值
+ *  @param:
+ *     # phm: hashmap_t pointer
+ *     # key: key value (not necessarily void*)
+ *     # hash: hash function
+ *     # cmp: compare function
+ *  @note: 
+ *  @usage: 
+ *  @return:
+ *     # NULL: no such key or key-value is undefined
+ *     # ...: done
+ *******************************/
+void* qsh_hashmap_getval(
+	hashmap_t *phm, void *key,
+	fn_hash_t hash, fn_cmp_t cmp);
+
+/********************************
+ *  @author: ZYmelaii
+ *  @brief: hashmap_t写入键值
+ *  @param:
+ *     # phm: hashmap_t pointer
+ *     # key: key value (not necessarily void*)
+ *     # hash: hash function
+ *     # cmp: compare function
+ *  @note: 写入键值的具体操作在返回的指针中完成，
+ *     结束写入后调用`qsh_hashmap_done`完成操作。
+ *  @usage: 
+ *  @return:
+ *     # NULL: no such key
+ *     # ...: done
+ *******************************/
+object_t* qsh_hashmap_write(
+	hashmap_t *phm, void *key,
+	fn_hash_t hash, fn_cmp_t cmp);
+
+/********************************
+ *  @author: ZYmelaii
+ *  @brief: hashmap_t结束键值写入
+ *  @param:
+<<<<<<< HEAD
+ *     # phm: hashmap_t pointer
+=======
+ *     # psm: hashmap_t pointer
+>>>>>>> 5b9272c627942fd39adf1e2d9446a174c1cc3c57
+ *  @note: `与qsh_hashmap_write`成对出现
+ *  @usage: 
+ *  @return:
+ *     # void: /
+ *******************************/
+void qsh_hashmap_done(hashmap_t *phm);
+
+/********************************
+ *  @author: ZYmelaii
+ *  @brief: 字符串哈希函数
+ *  @param:
+ *     # key: 给定字符串
+ *  @note: 使用DJBHash算法
+ *  @usage: 
+ *  @return:
+ *     # ...: 字符串hash值
+ *******************************/
+uint32_t qsh_hash_str(void *key);
 
 //#- shellio.c -
 
@@ -163,6 +328,19 @@ void* qsh_malloc(size_t size);
  *     # void: /
  *******************************/
 void qsh_free(void *ptr);
+
+/********************************
+ *  @author: ZYmelaii
+ *  @brief: 获取分配的内存空间大小
+ *  @param:
+ *     # ptr: mem-block pointer
+ *  @note: 
+ *  @usage: 
+ *  @return:
+ *     # -1: 无效的内存块
+ *     # ...: 内存块大小
+ *******************************/
+size_t qsh_msize(void *ptr);
 
 /********************************
  *  @author: ZYmelaii
