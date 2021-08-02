@@ -31,10 +31,10 @@
 #define TEST_TIMER_GETVAL(timer) \
 	((timer##_total) * 1000000)
 
-#define TEST_TMPAUSE                                \
+#define TEST_TMPAUSE                             \
 	do { TEST_TIMER_STOP(_test_tm); } while (0);
 
-#define TEST_TMRUN                                   \
+#define TEST_TMRUN                                \
 	do { TEST_TIMER_START(_test_tm); } while (0);
 
 #define TEST_INFO(str, args...)                       \
