@@ -164,12 +164,6 @@ void qsh_hashmap_del(phm, key, hash, cmp)
 	{
 		if (node->next == NULL) return;
 
-//#- DEBUG -
-		listnode_t watcher;
-		watcher.obj.data = node->next->obj.data;
-		watcher.next = node->next->next;
-//#- ENDLINE -
-
 		pair_t *pair = (pair_t*)node->next->obj.data;
 		
 		//! 一个正确地由`qsh_hashmap_add`加入的节点不会产生以下两种情况

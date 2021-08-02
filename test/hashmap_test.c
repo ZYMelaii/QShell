@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-//! gcc hashmap.c mmem.c hashmap_test.c -o test -D_DEBUG -I..\include
-=======
->>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
 //! target=hashmap_t
 
 #include "qtest.h"
@@ -10,7 +6,6 @@
 
 #include <string.h>
 
-<<<<<<< HEAD
 void setup()
 {
 	srand((unsigned)time(NULL));
@@ -18,11 +13,7 @@ void setup()
 
 char* genstr(int maxlen)
 {	//! 生成随机字符串
-=======
-char* genstr(int maxlen)
-{	//! 生成随机字符串
 	srand((unsigned)time(NULL));
->>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
 
 	int len = (rand() % maxlen) + 1;
 	char *str = (char*)qsh_malloc(len + 1);
@@ -58,14 +49,9 @@ void* sdup(const void *src)
 
 int main(int argc, char const *argv[])
 {
-<<<<<<< HEAD
-
 	setup();
 
 	const size_t N = 1000000, M = 4096, T = 128;
-=======
-	const size_t N = 1000000, M = 4096;
->>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
 	size_t i, j;
 
 	TEST_BEGIN(QHashmap - Construct & Destruct);
@@ -85,7 +71,7 @@ int main(int argc, char const *argv[])
 
 	TEST_BEGIN(QHashmap - Add & Delete Key);
 	{
-<<<<<<< HEAD
+
 		int cnt = 0;
 		hashmap_t map;
 		qsh_hashmap_init(&map, 256);
@@ -143,7 +129,6 @@ int main(int argc, char const *argv[])
 		}
 		TEST_TMRUN;
 
-=======
 		hashmap_t map;
 		qsh_hashmap_init(&map, 1024);
 		for (i = 0; i < N; ++i)
@@ -173,7 +158,7 @@ int main(int argc, char const *argv[])
 			}
 			TEST_TMRUN;
 		}
->>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
+
 		qsh_hashmap_free(&map);
 	}
 	TEST_END;
