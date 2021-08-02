@@ -141,7 +141,7 @@ int qsh_hashmap_add(phm, key, hash, cmp, dup)
 
 	qsh_free(pair);
 
-	if (retcode == 0) retcode = 3;
+	if (retcode == 0) retcode = -3;
 
 	return retcode;
 }
