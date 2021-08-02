@@ -5,6 +5,8 @@
 
 #include <windows.h>
 
+#ifdef QSH_TEST
+
 #define TEST_TIMER_NEW(timer)              \
 	union _LARGE_INTEGER timer##_start;    \
 	double timer##_total = .0;             \
@@ -128,3 +130,39 @@ do {                                  \
 	{                               \
 		TEST_FAILED(expr != value); \
 	}
+
+#else
+
+#define TEST_TIMER_NEW(timer)
+
+#define TEST_TIMER_START(timer)
+
+#define TEST_TIMER_STOP(timer)
+
+#define TEST_TIMER_CLEAR(timer)
+
+#define TEST_TIMER_GETVAL(timer)
+
+#define TEST_TMPAUSE
+
+#define TEST_TMRUN
+
+#define TEST_INFO(str, agrs...)
+
+#define TEST_BEGIN(target)
+
+#define TEST_END
+
+#define TEST_DONE
+
+#define TEST_FAILED(expr)
+
+#define TEST(statement)
+
+#define TEST_EXPR(expr)
+
+#define TEST_EQU(expr, value)
+
+#define TEST_NEQ(expr, value)
+
+#endif /* QSH_TEST */

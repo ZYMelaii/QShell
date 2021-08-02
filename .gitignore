@@ -55,3 +55,5 @@ dkms.conf
 
 #- etc -
 build/
+.log
+.log.*

@@ -15,7 +15,7 @@ LIB_OBJS := shellio.o mmem.o \
 .SUFFIXES: .c .cpp
 
 *.c.o:
-	@${CC} -c $<
+	${CC} -c $<
 
 *.cpp.o:
 	${CXX} -c $<
@@ -32,6 +32,7 @@ move:
 	@if not exist ..\build (mkdir ..\build)
 	mv -f *.o *.exe *.a ..\build
 
+.PHONY: core.obj envr.obj cmdline.obj eval.obj uiman.obj qshw.obj
 core.obj: shellio.o mmem.o hashmap.o core.h
 
 envr.obj: envr.o var.o envr.h

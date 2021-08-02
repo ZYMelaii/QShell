@@ -1,10 +1,14 @@
-#include "qtest.h"
+//! target=qshw_match_format_token
 
-//! target=qshw_match_format_token [from `qshw.c`]
+#define QSH_TEST
+#include <qsh/qtest.h>
+
 extern const char* qshw_match_format_token(const char *s, int *t_spec, int *t_len);
 
-int main(int argc, char const *argv[])
+void test_0()
 {
+	const size_t N = 4;
+
 	char* s_test[] =
 	{
 		"%%",
@@ -21,13 +25,10 @@ int main(int argc, char const *argv[])
 		{2, 0},
 	};
 
-	const int cnt = 4;
+	TEST_BEGIN(QShell Winform - function qshw_match_format_token);
 
 	int i;
-
-	TEST_BEGIN(qshw_match_format_token);
-
-	for (i = 0; i < cnt; ++i)
+	for (i = 0; i < N; ++i)
 	{
 		int t_spec, t_len;
 		qshw_match_format_token(s_test[i], &t_spec, &t_len);
@@ -35,6 +36,4 @@ int main(int argc, char const *argv[])
 	}
 
 	TEST_END;
-
-	return 0;
 }
