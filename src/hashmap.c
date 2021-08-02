@@ -4,15 +4,21 @@
 #include "core.h"
 
 //! 获取散列桶数量
-inline int qsh_hashmap_size(hashmap_t *phm)
+__inline__ __attribute__((always_inline))
+int qsh_hashmap_size(hashmap_t *phm)
 {
 	return (qsh_msize(phm->data) - sizeof(object_t) * 2) / sizeof(listnode_t);
 }
 
 void qsh_hashmap_init(hashmap_t *phm, size_t size)
 {
-	assert(size > 0 && size <= QSH_HASH_MAX);
 	assert(phm != NULL);
+
+	if (size <= 0 || size > QSH_HASH_MAX)
+	{
+		phm->data = NULL;
+		return;
+	}
 
 	size_t real_size = sizeof(listnode_t) * size + sizeof(object_t) * 2;
 	phm->data = qsh_malloc(real_size); //! 分配散列桶并追加额外信息
@@ -66,7 +72,8 @@ void qsh_hashmap_free(hashmap_t *phm)
 	phm->data = NULL;
 }
 
-inline void qsh_hashmap_add_impl(listnode_t *node, void *dupkey)
+__inline__ __attribute__((always_inline))
+void qsh_hashmap_add_impl(listnode_t *node, void *dupkey)
 {
 	node->obj.data = qsh_malloc(sizeof(pair_t));
 	((pair_t*)node->obj.data)->key = dupkey;
@@ -108,7 +115,8 @@ int qsh_hashmap_add(phm, key, hash, cmp, dup)
 	return -1;
 }
 
-inline void qsh_hashmap_del_impl(listnode_t *node)
+__inline__ __attribute__((always_inline))
+void qsh_hashmap_del_impl(listnode_t *node)
 {
 	pair_t *pair = (pair_t*)node->obj.data;
 	qsh_free(pair->key);
@@ -173,7 +181,8 @@ void qsh_hashmap_del(phm, key, hash, cmp)
  *     # NULL: failed
  *     # ...: done
  *******************************/
-static listnode_t* qsh_hashmap_find(phm, key, hash, cmp)
+__inline__ __attribute__((always_inline))
+listnode_t* qsh_hashmap_find(phm, key, hash, cmp)
 	hashmap_t *phm; void *key;
 	fn_hash_t hash; fn_cmp_t cmp;
 {

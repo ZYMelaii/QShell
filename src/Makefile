@@ -4,7 +4,7 @@ CC := gcc
 CXX := g++
 AR := ar
 CWARNINGS := -Wall -Wno-discarded-qualifiers -Wno-comment
-CFLAGS := ${CWARNINGS} -I. -L. -L..\build
+CFLAGS := ${CWARNINGS} -I. -L. -L../build
 
 LIB_OBJS := shellio.o mmem.o \
 	envr.o hashmap.o var.o \
