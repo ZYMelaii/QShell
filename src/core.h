@@ -185,9 +185,11 @@ void qsh_hashmap_free(hashmap_t *phm); //! 销毁哈希表
  *  @note: 
  *  @usage: 
  *  @return:
- *     # -1: failed
  *     # 0: done
  *     # 1: key already exists
+ *     # -1: failed to allocate memory
+ *     # -2: unreliable `fn_dup_t dup` function
+ *     # -3: unknown error
  *******************************/
 int qsh_hashmap_add(
 	hashmap_t *phm, void *key,
@@ -251,11 +253,7 @@ object_t* qsh_hashmap_write(
  *  @author: ZYmelaii
  *  @brief: hashmap_t结束键值写入
  *  @param:
-<<<<<<< HEAD
  *     # phm: hashmap_t pointer
-=======
- *     # psm: hashmap_t pointer
->>>>>>> 5b9272c627942fd39adf1e2d9446a174c1cc3c57
  *  @note: `与qsh_hashmap_write`成对出现
  *  @usage: 
  *  @return:
