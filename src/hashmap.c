@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 #include <stdio.h>
 
-=======
->>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
 #include <assert.h>
 #include <string.h>
 
@@ -77,24 +74,12 @@ void qsh_hashmap_free(hashmap_t *phm)
 	phm->data = NULL;
 }
 
-<<<<<<< HEAD
-=======
-__inline__ __attribute__((always_inline))
-void qsh_hashmap_add_impl(listnode_t *node, void *dupkey)
-{
-	node->obj.data = qsh_malloc(sizeof(pair_t));
-	((pair_t*)node->obj.data)->key = dupkey;
-	((pair_t*)node->obj.data)->value = NULL;
-}
-
->>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
 int qsh_hashmap_add(phm, key, hash, cmp, dup)
 	hashmap_t *phm; void *key;
 	fn_hash_t hash; fn_cmp_t cmp; fn_dup_t dup;
 {
 	assert(phm != NULL);
 
-<<<<<<< HEAD
 	pair_t *pair = qsh_malloc(sizeof(pair_t));
 
 	if (pair == NULL || ((intptr_t)pair & 0xffffffff) == 0xbaadf00d) return -1;
@@ -159,48 +144,6 @@ int qsh_hashmap_add(phm, key, hash, cmp, dup)
 	if (retcode == 0) retcode = 3;
 
 	return retcode;
-=======
-	int bucketid = hash(key) % qsh_hashmap_size(phm);
-	listnode_t *node = (listnode_t*)phm->data + bucketid;
-
-	if (node->obj.data == NULL)
-	{
-		qsh_hashmap_add_impl(node, dup(key));
-		return 0;
-	}
-
-	while (node)
-	{
-		if (cmp(key, ((pair_t*)node->obj.data)->key) == 0)
-		{	//! 键已经存在
-			return 1;
-		}
-
-		if (node->next == NULL)
-		{
-			node->next = (listnode_t*)qsh_malloc(sizeof(listnode_t));
-			qsh_hashmap_add_impl(node->next, dup(key));
-			return 0;
-		}
-
-		node = node->next;
-	}
-
-	return -1;
-}
-
-__inline__ __attribute__((always_inline))
-void qsh_hashmap_del_impl(listnode_t *node)
-{
-	pair_t *pair = (pair_t*)node->obj.data;
-	qsh_free(pair->key);
-	if (pair->value != NULL)
-	{
-		qsh_free(pair->value);
-	}
-	qsh_free(pair);
-	node->obj.data = NULL;
->>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
 }
 
 void qsh_hashmap_del(phm, key, hash, cmp)
@@ -209,7 +152,6 @@ void qsh_hashmap_del(phm, key, hash, cmp)
 {
 	assert(phm != NULL);
 
-<<<<<<< HEAD
 	listnode_t fake_root;
 
 	int bucketid = hash(key) % qsh_hashmap_size(phm);
@@ -217,29 +159,11 @@ void qsh_hashmap_del(phm, key, hash, cmp)
 	listnode_t *node = &fake_root;
 
 	listnode_t *delnode_parent = NULL;
-=======
-	int bucketid = hash(key) % qsh_hashmap_size(phm);
-	listnode_t *node = (listnode_t*)phm->data + bucketid;
-
-	if (cmp(key, ((pair_t*)node->obj.data)->key) == 0)
-	{
-		qsh_hashmap_del_impl(node);
-		if (node->next != NULL)
-		{
-			node->obj.data = node->next->obj.data;
-			listnode_t *tmp = node->next;
-			node->next = node->next->next;
-			qsh_free(tmp);
-		}
-		return;
-	}
->>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
 
 	while (node)
 	{
 		if (node->next == NULL) return;
 
-<<<<<<< HEAD
 //#- DEBUG -
 		listnode_t watcher;
 		watcher.obj.data = node->next->obj.data;
@@ -257,20 +181,10 @@ void qsh_hashmap_del(phm, key, hash, cmp)
 		{
 			delnode_parent = node;
 			break;
-=======
-		if (cmp(key, ((pair_t*)node->next->obj.data)->key) == 0)
-		{
-			qsh_hashmap_del_impl(node->next);
-			listnode_t *tmp = node->next;
-			node->next = node->next->next;
-			qsh_free(tmp);
-			return;
->>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
 		}
 
 		node = node->next;
 	}
-<<<<<<< HEAD
 
 	//！ 除了不可预料的异常情况，跳出循环后程序总将进入以下条件语句
 	if (delnode_parent != NULL)
@@ -303,10 +217,6 @@ void qsh_hashmap_del(phm, key, hash, cmp)
 }
 
 
-=======
-}
-
->>>>>>> d83df209b680a100876143ede56154f6a2ba8a9a
 /********************************
  *  @author: ZYmelaii
  *  @brief: hashmap_t查找目标节点
