@@ -223,10 +223,11 @@ void qsh_hashmap_del(
  *  @note: 
  *  @usage: 
  *  @return:
- *     # NULL: no such key or key-value is undefined
+ *     # NULL: the key doesn't exist
+ *     # 0xffffffff: undefined key-value
  *     # ...: done
  *******************************/
-void* qsh_hashmap_getval(
+const void* qsh_hashmap_getval(
 	hashmap_t *phm, void *key,
 	fn_hash_t hash, fn_cmp_t cmp);
 

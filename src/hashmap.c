@@ -245,7 +245,7 @@ listnode_t* qsh_hashmap_find(phm, key, hash, cmp)
 	return NULL;
 }
 
-void* qsh_hashmap_getval(phm, key, hash, cmp)
+const void* qsh_hashmap_getval(phm, key, hash, cmp)
 	hashmap_t *phm; void *key;
 	fn_hash_t hash; fn_cmp_t cmp;
 {
@@ -255,7 +255,7 @@ void* qsh_hashmap_getval(phm, key, hash, cmp)
 	if (node == NULL) return NULL;
 
 	pair_t *pair = (pair_t*)node->obj.data;
-	if (pair->value == NULL) return NULL;
+	if (pair->value == NULL) return 0xffffffff;
 
 	return pair->value;
 }
