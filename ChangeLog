@@ -1,7 +1,20 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [0.0.2.5] - 2021-7-21
+## [0.0.3.2] - 2021-8-3
+### Added
+- function `qsh_var_*` (from `var.c`)
+
+## [0.0.3.1] - 2021-8-2
+### Added
+- object `hashmap_t` [universal hash table equipped with linked list] (from `hashmap.c`)
+- function `qsh_hashmap_*`
+- source `qtest.h` [simple unit test macro suites]
+- testunit for `qshw.c`,`hashmap.c`
+### Changed
+- classify `hashmap.c` into `core.h` source
+
+## [0.0.2.5] - 2021-7-31
 ### Changed
 - module QShell UI [pre-enable extensions] (from `shell.c`,`uiman.c`)
 - detailed builtin cmd `exit`,`clear` (from `builtin.c`)

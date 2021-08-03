@@ -1,11 +1,5 @@
 root = true
 
-<<<<<<< HEAD
 [*.c *.h]
 indent_style = space
 indent_size = 4
-=======
-[*]
-indent_style = space
-indent_size = 4
->>>>>>> f541b99063ceb8d4952532f6ade2ce37abfcdb15
