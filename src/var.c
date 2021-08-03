@@ -19,7 +19,7 @@ return_t qsh_var_new(context_t *ctx, const char *key)
 {
 	return_t retcode = qsh_hashmap_add((hashmap_t*)ctx->symmap, key,
 		qsh_hash_str, qsh_hashmap_sscmp, qsh_hashmap_ssdup);
-	return retcode
+	return retcode;
 }
 
 return_t qsh_var_del(context_t *ctx, const char *key)
@@ -34,7 +34,7 @@ return_t qsh_var_get(context_t *ctx, const char *key, const char **pvalue)
 {
 	*pvalue = (const char*)qsh_hashmap_getval((hashmap_t*)ctx->symmap, key,
 		qsh_hash_str, qsh_hashmap_sscmp);
-	return (*pvalue == 0xffffffff ? 1 : (*pvalue == NULL ? -1 : 0));
+	return (*pvalue == BADPTR ? 1 : (*pvalue == NULL ? -1 : 0));
 }
 
 return_t qsh_var_set(context_t *ctx, const char *key, const char *value)

@@ -1,5 +1,9 @@
 .DEFAULT_GOAL := all
 
+MD := mkdir.exe
+RM := rm.exe
+MV := mv.exe
+
 CC := gcc
 CXX := g++
 AR := ar
@@ -29,8 +33,8 @@ qshell: shell.c libqsh.a
 all: libqsh.a qshell move
 
 move:
-	@if not exist ..\build (mkdir ..\build)
-	mv -f *.o *.exe *.a ..\build
+	${MD} -p ../build
+	${MV} -f *.o *.exe *.a ../build
 
 .PHONY: core.obj envr.obj cmdline.obj eval.obj uiman.obj qshw.obj
 core.obj: shellio.o mmem.o hashmap.o core.h
@@ -47,5 +51,5 @@ qshw.obj: qshw.o qshw.h
 
 .PHONY: clean
 clean:
-	-@rm *.o *.a *.exe
-	-@rm -r ..\build
+	-@${RM} *.o *.a *.exe
+	-@${RM} -r ../build

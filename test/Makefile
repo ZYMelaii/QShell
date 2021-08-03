@@ -2,7 +2,7 @@
 
 CFLAGS := -I../../include -L../../build -lqsh
 
-.PHONY: hashmap.c qshw.c sample.0
+.PHONY: hashmap.c qshw.c sample.0 clean
 
 hashmap.c:
 	cd $@ && gcc *.c -o test ${CFLAGS}
@@ -13,4 +13,7 @@ qshw.c:
 sample.0:
 	cd sample && gcc 0.c -o 0.exe ${CFLAGS}
 
-all: hashmap.c qshw.c
+all: hashmap.c qshw.c sample.0
+
+clean:
+	find . -name "*.exe" | xargs rm -rf

@@ -8,6 +8,15 @@
 #define MAX_PATH 260
 #endif
 
+#ifndef NULL
+#define NULL ((void*)0)
+#endif
+
+#ifdef BADPTR
+#undef BADPTR
+#endif
+#define BADPTR ((void*)0xffffffff)
+
 typedef int32_t return_t;
 
 /********************************
@@ -224,7 +233,7 @@ void qsh_hashmap_del(
  *  @usage: 
  *  @return:
  *     # NULL: the key doesn't exist
- *     # 0xffffffff: undefined key-value
+ *     # BADPTR: undefined key-value
  *     # ...: done
  *******************************/
 void* qsh_hashmap_getval(

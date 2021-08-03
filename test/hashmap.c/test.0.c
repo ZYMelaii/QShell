@@ -145,7 +145,7 @@ void test_2()
 	for (i = 0; i < N * M; ++i)
 	{
 		j = (j * M) % G;
-		TEST_EQU(qsh_hashmap_getval(&map, keys[j], qsh_hash_str, sscmp), 0xffffffff);
+		TEST_EQU(qsh_hashmap_getval(&map, keys[j], qsh_hash_str, sscmp), ((void*)0xffffffff));
 	}
 
 	TEST_TMPAUSE;

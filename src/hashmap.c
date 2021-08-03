@@ -82,7 +82,7 @@ int qsh_hashmap_add(phm, key, hash, cmp, dup)
 
 	pair_t *pair = qsh_malloc(sizeof(pair_t));
 
-	if (pair == NULL || ((intptr_t)pair & 0xffffffff) == 0xbaadf00d) return -1;
+	if (pair == NULL) return -1;
 
 	return_t retcode = 0;
 
@@ -255,7 +255,7 @@ void* qsh_hashmap_getval(phm, key, hash, cmp)
 	if (node == NULL) return NULL;
 
 	pair_t *pair = (pair_t*)node->obj.data;
-	if (pair->value == NULL) return 0xffffffff;
+	if (pair->value == NULL) return BADPTR;
 
 	return pair->value;
 }
@@ -305,5 +305,5 @@ uint32_t qsh_hash_str(void *key)
 	{
 		hash += (hash << 5) + (*str++);
 	}
-	return (hash & 0x7FFFFFFF);
+	return (hash & 0x7fffffff);
 }
