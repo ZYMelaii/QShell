@@ -121,7 +121,7 @@ int fncmp(void *x, void *y)
 
 void* fndup(const void *src)
 {   //! 键拷贝函数
-    //! 该函数返回的指针内存空间应当由`qsh_strdup`分配
+    //! 该函数返回的指针内存空间应当由`qsh_malloc`分配
     return (src != NULL ? qsh_strdup((const char*)src) : NULL);
 }
 
