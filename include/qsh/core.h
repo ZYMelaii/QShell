@@ -227,7 +227,7 @@ void qsh_hashmap_del(
  *     # 0xffffffff: undefined key-value
  *     # ...: done
  *******************************/
-const void* qsh_hashmap_getval(
+void* qsh_hashmap_getval(
 	hashmap_t *phm, void *key,
 	fn_hash_t hash, fn_cmp_t cmp);
 

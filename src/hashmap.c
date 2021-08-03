@@ -245,7 +245,7 @@ listnode_t* qsh_hashmap_find(phm, key, hash, cmp)
 	return NULL;
 }
 
-const void* qsh_hashmap_getval(phm, key, hash, cmp)
+void* qsh_hashmap_getval(phm, key, hash, cmp)
 	hashmap_t *phm; void *key;
 	fn_hash_t hash; fn_cmp_t cmp;
 {

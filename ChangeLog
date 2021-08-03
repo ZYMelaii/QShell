@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.0.3.3] - 2021-8-3
+### Added
+- `test\sample\*`
+### Changed
+- reset the return type of `qsh_hashmap_getval` to `void*`
+
 ## [0.0.3.2] - 2021-8-3
 ### Added
 - function `qsh_var_*` (from `var.c`)
