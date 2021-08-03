@@ -40,6 +40,7 @@ char* genstr(int maxlen)
 
 int sscmp(void *x, void *y)
 {
+	if (x == NULL || y == NULL) return -1;
 	return strcmp((const char*)x, (const char*)y);
 }
 
@@ -51,10 +52,10 @@ void* sdup(const void *src)
 void test_0()
 {
 	setup();
-	
-	size_t i;
 
 	TEST_BEGIN(QShell hashmap - Construct & Destruct);
+
+	size_t i;
 
 	const size_t N = 1000000;
 
@@ -88,10 +89,7 @@ void test_1()
 
 	TEST_TMPAUSE;
 	char *strs[T];
-	for (i = 0; i < T; ++i)
-	{
-		strs[i] = genstr(64);
-	}
+	for (i = 0; i < T;) { strs[i++] = genstr(64); }
 	TEST_TMRUN;
 
 	size_t U = 1;
@@ -112,9 +110,98 @@ void test_1()
 	}
 
 	TEST_TMPAUSE;
-	for (i = 0; i < T; ++i)
+	for (i = 0; i < T;) { qsh_free(strs[i++]); }
+	TEST_TMRUN;
+
+	qsh_hashmap_free(&map);
+
+	TEST_END;
+}
+
+void test_2()
+{
+	setup();
+
+	TEST_BEGIN(QShell hashmap - Find Element);
+
+	size_t i, j;
+
+	const size_t N = 1000000, M = 10;
+	const size_t T = 256, G = T * 4;
+
+	hashmap_t map;
+	qsh_hashmap_init(&map, T);
+
+	TEST_TMPAUSE;
+	char *keys[G];
+	for (i = 0; i < G; ++i)
 	{
-		qsh_free(strs[i]);
+		keys[i] = genstr(64);
+		qsh_hashmap_add(&map, (void*)keys[i], qsh_hash_str, sscmp, sdup);
+	}
+	TEST_TMRUN;
+
+	j = 1;
+	for (i = 0; i < N * M; ++i)
+	{
+		j = (j * M) % G;
+		TEST_EQU(qsh_hashmap_getval(&map, keys[j], qsh_hash_str, sscmp), 0xffffffff);
+	}
+
+	TEST_TMPAUSE;
+	for (i = 0; i < G; ++i)
+	{
+		qsh_hashmap_del(&map, (void*)keys[i], qsh_hash_str, sscmp);
+		qsh_free(keys[i]);
+	}
+	TEST_TMRUN;
+
+	qsh_hashmap_free(&map);
+
+	TEST_END;
+}
+
+void test_3()
+{
+	setup();
+
+	TEST_BEGIN(QShell hashmap - Read & Write);
+
+	size_t i, j;
+
+	const size_t N = 10000000, M = 137;
+	const size_t T = 256, G = T * 4;
+
+	hashmap_t map;
+	qsh_hashmap_init(&map, T);
+
+	TEST_TMPAUSE;
+	char *keys[G];
+	for (i = 0; i < G; ++i)
+	{
+		keys[i] = genstr(64);
+		qsh_hashmap_add(&map, (void*)keys[i], qsh_hash_str, sscmp, sdup);
+	}
+	TEST_TMRUN;
+
+	j = 1;
+	for (i = 0; i < N; ++i)
+	{
+		j = (j * M) % G;
+		object_t *obj = qsh_hashmap_write(&map, keys[j], qsh_hash_str, sscmp);
+		TEST_TMPAUSE;
+		void *val = (void*)genstr(256);
+		TEST_TMRUN;
+		obj->data = val;
+		qsh_hashmap_done(&map);
+		TEST_EQU(sscmp(val, qsh_hashmap_getval(&map, keys[j], qsh_hash_str, sscmp)), 0);
+	}
+
+	TEST_TMPAUSE;
+	for (i = 0; i < G; ++i)
+	{
+		qsh_hashmap_del(&map, (void*)keys[i], qsh_hash_str, sscmp);
+		qsh_free(keys[i]);
 	}
 	TEST_TMRUN;
 

@@ -1,11 +1,13 @@
 extern void test_0();
 extern void test_1();
+extern void test_2();
+extern void test_3();
 
 typedef void(*T)();
 
 T TEST_CASES[] =
 {
-	test_0, test_1, //! test.0.c
+	test_0, test_1, test_2, test_3, //! test.0.c
 	0L,
 };
 
