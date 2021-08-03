@@ -59,9 +59,66 @@ typedef struct _context_s
 } context_t;
 
 //#- var.c -
-void qsh_var_new(context_t *ctx, const char *key); //! 创建变量
-void qsh_var_del(context_t *ctx, const char *key); //! 销毁变量
-void qsh_var_get(context_t *ctx, const char *key, const char **pvalue); //! 获取变量值
-void qsh_var_set(context_t *ctx, const char *key, const char *value); //! 写入变量
+
+/********************************
+ *  @author: ZYmelaii
+ *  @brief: 创建变量
+ *  @param:
+ *     # ctx: context_t pointer
+ *     # key: var-name
+ *  @note: 
+ *  @usage: 
+ *  @return:
+ *     # 0: done
+ *     # 1: var already exists
+ *     # -1: failed to allocate memory
+ *     # -2: failed to copy var-name
+ *     # -3: unknown error
+ *******************************/
+return_t qsh_var_new(context_t *ctx, const char *key);
+
+/********************************
+ *  @author: ZYmelaii
+ *  @brief: 销毁变量
+ *  @param:
+ *     # ctx: context_t pointer
+ *     # key: var-name
+ *  @note: 
+ *  @usage: 
+ *  @return:
+ *     # 0: done
+ *     # -1: failed (unknown error)
+ *******************************/
+return_t qsh_var_del(context_t *ctx, const char *key);
+
+/********************************
+ *  @author: ZYmelaii
+ *  @brief: 获取变量值
+ *  @param:
+ *     # ctx: context_t pointer
+ *     # key: var-name
+ *     # pvalue: pointer to store var value
+ *  @note: 
+ *  @usage: 
+ *  @return:
+ *     # 0: done
+ *     # 1: var value is (null)
+ *     # -1: failed to find var
+ *******************************/
+return_t qsh_var_get(context_t *ctx, const char *key, const char **pvalue);
+
+/********************************
+ *  @author: ZYmelaii
+ *  @brief: 写入变量
+ *  @param:
+ *     # void: /
+ *  @note: 
+ *  @usage: 
+ *  @return:
+ *     # 0: done
+ *     # -1: failed to find var
+ *     # -2: failed to copy value
+ *******************************/
+return_t qsh_var_set(context_t *ctx, const char *key, const char *value);
 
 #endif

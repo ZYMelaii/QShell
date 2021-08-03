@@ -87,6 +87,11 @@ do {                                  \
 	} while (0);                                          \
 } while (0);
 
+#define TEST_SET_USIZE(unitsize)     \
+	do {                             \
+		_test_unitsize = (unitsize); \
+	} while (0);
+
 #define TEST_DONE     \
 	do {              \
 		++_test_done; \
