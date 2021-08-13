@@ -8,6 +8,20 @@
 #include <io.h>
 #include <direct.h>
 
+char _binpath[255];
+
+void getbinpath()
+{
+	int len = strrchr(_pgmptr, '\\') - _pgmptr;
+	char *p = _binpath;
+	char *q = _pgmptr;
+	while (len-- > 0)
+	{
+		*p++ = *q++;
+	}
+	*p = '\0';
+}
+
 int _matchany(const char *src, ...)
 {
 	va_list v_opts;
@@ -29,8 +43,6 @@ int _matchany(const char *src, ...)
 
 void getmanpath(const char *cmd, char *pathbuf)
 {
-	char format[256];
-
 	const char *rmost = cmd + strlen(cmd) - 1;
 
 	const char *start1 = strrchr(cmd, '\\');
@@ -55,15 +67,23 @@ void getmanpath(const char *cmd, char *pathbuf)
 	}
 
 	int len = (size_t)(end - start);
-	sprintf(format, "man/%%%ds.man", len);
-	sprintf(pathbuf, format, cmd);
+	sprintf(pathbuf, "%s/man/", _binpath);
+	char *p = pathbuf + strlen(pathbuf);
+	const char *q = start;
+	while (len-- > 0)
+	{
+		*p++ = *q++;
+	}
+	strcpy(p, ".man");
 }
 
 int buildman(const char *cmd)
 {
-	if (access("man", F_OK) != 0)
+	char dir[255];
+	sprintf(dir, "%s/man", _binpath);
+	if (access(dir, F_OK) != 0)
 	{
-		mkdir("man");
+		mkdir(dir);
 	}
 
 	char *const argv[] = { (char *const)cmd, "--help", NULL };
@@ -77,13 +97,14 @@ int buildman(const char *cmd)
 	int exitcode = 0;
 	intptr_t hproc = spawnvp(_P_NOWAIT, cmd, argv);
 	intptr_t hd = cwait(&exitcode, hproc, 0);
-	if (hd == -1)
-	{
-		exitcode = -1;
-	}
 
+	fflush(stdout);
 	fclose(stdout);
-	if (exitcode == -1)
+
+	FILE *fp = fopen(fnman, "r");
+	char ch = fgetc(stdout);
+	fclose(fp);
+	if (ch == EOF)
 	{
 		remove(fnman);
 	}
@@ -99,6 +120,8 @@ int buildman(const char *cmd)
 
 int main(int argc, char const *argv[])
 {
+	getbinpath();
+
 	if (argc == 1)
 	{
 		goto help;
@@ -120,7 +143,7 @@ int main(int argc, char const *argv[])
 			if (access(fnman, F_OK | R_OK) != 0)
 			{
 				int exitcode = buildman(argv[1]);
-				if (exitcode != 0)
+				if (exitcode < 0)
 				{
 					if (exitcode == -1)
 					{
