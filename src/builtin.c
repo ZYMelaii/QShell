@@ -78,6 +78,10 @@ NEW_BUILTIN(cd, pc)
 	assert(pc->root != NULL);
 	assert(pc->root->bValid == 1);
 
+	if (pc->argc == 0) return;
+
+	
+
 }
 
 NEW_BUILTIN(pwd, pc)

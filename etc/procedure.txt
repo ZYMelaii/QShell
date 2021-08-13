@@ -1,0 +1,4 @@
+1. alias
+2. unquote
+3. expand
+4. exec/eval

@@ -58,7 +58,7 @@ void qsh_readline(shell_t *psh)
 
 	char format[32];
 
-	sprintf(format, "%%%d[^\n]", BUF0_SIZE); //! 限制最大读取数，放置越界
+	sprintf(format, "%%%d[^\n]", BUF0_SIZE); //! 限制最大读取数，防止越界
 	int bRet = scanf(format, psh->buf_0);
 
 	if (bRet <= 0)

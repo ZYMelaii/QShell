@@ -40,22 +40,22 @@ typedef struct _context_s
 	 *  @value:
 	 *     # -1: invalid context
 	 *     # 0: root
-	 *     # 1: QShell (user)
+	 *     # 1: user
 	 *     # ...: others
 	 *******************************/
-	int cid; //! 上下文ID
+	int cid; //! ID
 
 	/********************************
 	 *  @object: symmap -> sstrmap_t*
 	 *  @value:
-	 *     # context_t::cid == 0: system variables
-	 *     # context_t::cid == 1: QShell (builtin|user) variables
-	 *     # ...: local variables
+	 *     # context_t::cid == 0: system-level
+	 *     # context_t::cid == 1: user-level
+	 *     # ...: local-level
 	 *******************************/
-	sstrmap_t *symmap; //! 符号表
+	sstrmap_t *symmap; //! symbol/variable map
 
-	struct _context_s *parent; //! 父级上下文
-	struct _context_s *root; //! 根环境
+	struct _context_s *parent; //! parent context_t
+	struct _context_s *root; //! context_t::cid == 0
 } context_t;
 
 //#- var.c -

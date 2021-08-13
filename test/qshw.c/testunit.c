@@ -1,4 +1,5 @@
 extern void test_0();
+extern void test_1();
 
 typedef void(*T)();
 

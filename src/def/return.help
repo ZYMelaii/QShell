@@ -1,0 +1,5 @@
+usage: return [n]
+
+1. can only `return' from a function or sourced script
+2. too many arguments
+3. arg: numeric argument required
