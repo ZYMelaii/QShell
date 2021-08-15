@@ -45,7 +45,8 @@ all: libqsh.a qshell move
 
 move:
 	${MD} -p ../build
-	${MV} -f *.o *.exe *.a ../build
+	${RM} -f *.o
+	${MV} -f *.exe *.a *.so ../build
 
 .PHONY: ${TARGET_OBJS}
 
