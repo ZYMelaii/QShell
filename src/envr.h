@@ -1,5 +1,5 @@
-#ifndef QSHELL_ENVR_H
-#define QSHELL_ENVR_H
+#ifndef QSHELL_ENVR
+#define QSHELL_ENVR
 
 #include "core.h"
 

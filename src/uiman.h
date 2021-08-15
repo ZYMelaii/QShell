@@ -1,5 +1,5 @@
-#ifndef QSHELL_UIMAN_H
-#define QSHELL_UIMAN_H
+#ifndef QSHELL_UIMAN
+#define QSHELL_UIMAN
 
 #include "core.h"
 

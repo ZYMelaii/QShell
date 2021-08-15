@@ -1,5 +1,5 @@
-#ifndef QSHELL_CMDLINE_H
-#define QSHELL_CMDLINE_H
+#ifndef QSHELL_CMDLINE
+#define QSHELL_CMDLINE
 
 #include "core.h"
 

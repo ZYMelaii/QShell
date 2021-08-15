@@ -4,17 +4,28 @@ MD := mkdir.exe
 RM := rm.exe
 MV := mv.exe
 
-CC := gcc
+CC  := gcc
 CXX := g++
-AR := ar
-CWARNINGS := -Wall -Wno-discarded-qualifiers -Wno-comment
-CFLAGS := ${CWARNINGS} -I. -L. -L../build
+AR  := ar
 
-LIB_OBJS := shellio.o mmem.o \
-	envr.o hashmap.o var.o \
-	cmdline.o builtin.o parse.o chrmap.o \
-	uiman.o \
-	qshw.o
+CWARNINGS := -Wall -Wno-discarded-qualifiers -Wno-comment
+CFLAGS    := ${CWARNINGS} -DQSHELL_BUILD
+LFLAGS    := -I. -L. -L../build
+
+CORE_OBJS    := shellio.o mmem.o hashmap.o
+ENVR_OBJS    := envr.o var.o
+PARSER_OBJS  := parser.o lexer.o tokenizer.o scanner.o word.o syntax.o
+CMDLINE_OBJS := cmdline.o
+EVAL_OBJS    := builtin.o
+UIMAN_OBJS   := uiman.o
+QSHW_OBJS    := qshw.o
+
+LIB_OBJS := ${CORE_OBJS} ${ENVR_OBJS} ${PARSER_OBJS} \
+	${CMDLINE_OBJS} ${EVAL_OBJS} ${UIMAN_OBJS} \
+	${QSHW_OBJS}
+
+TARGET_OBJS := core.obj envr.obj parser.obj \
+	cmdline.obj eval.obj uiman.obj qshw.obj
 
 .SUFFIXES: .c .cpp
 
@@ -24,11 +35,11 @@ LIB_OBJS := shellio.o mmem.o \
 *.cpp.o:
 	${CXX} -c $<
 
-libqsh.a: core.obj envr.obj cmdline.obj eval.obj uiman.obj qshw.obj
+libqsh.a: ${TARGET_OBJS}
 	${AR} rcs $@ ${LIB_OBJS}
 
 qshell: shell.c libqsh.a
-	${CC} $< -o $@ -lqsh ${CFLAGS}
+	${CC} $< -o $@ ${CFLAGS} ${LFLAGS} -lqsh
 
 all: libqsh.a qshell move
 
@@ -36,18 +47,21 @@ move:
 	${MD} -p ../build
 	${MV} -f *.o *.exe *.a ../build
 
-.PHONY: core.obj envr.obj cmdline.obj eval.obj uiman.obj qshw.obj
-core.obj: shellio.o mmem.o hashmap.o core.h
+.PHONY: ${TARGET_OBJS}
 
-envr.obj: envr.o var.o envr.h
+core.obj: ${CORE_OBJS} core.h utf8str.h
 
-cmdline.obj: cmdline.o cmdline.h
+envr.obj: ${ENVR_OBJS} envr.h
 
-eval.obj: builtin.o parse.o chrmap.o eval.h
+parser.obj: ${PARSER_OBJS} parser.h syntax.h cmdflags.h
 
-uiman.obj: uiman.o uiman.h
+cmdline.obj: ${CMDLINE_OBJS} cmdline.h
 
-qshw.obj: qshw.o qshw.h
+eval.obj: ${EVAL_OBJS}  eval.h
+
+uiman.obj: ${UIMAN_OBJS} uiman.h
+
+qshw.obj: ${QSHW_OBJS} qshw.h
 
 .PHONY: clean
 clean:

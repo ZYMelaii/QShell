@@ -1,0 +1,14 @@
+QShell Core:
+	qsh_*
+QShell Table:
+	qshtb_*
+QShell Parser:
+	qshp_*
+QShell Global Static Variable:
+	_qshg_*
+QShell UI Implement:
+	qshui_*
+QShell UI Staic Implement:
+	qshuis_*
+QShell Platform:
+	qshw_*

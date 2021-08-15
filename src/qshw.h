@@ -1,5 +1,5 @@
-#ifndef QSHELL_QSHW_H
-#define QSHELL_QSHW_H
+#ifndef QSHELL_QSHW
+#define QSHELL_QSHW
 
 #include <stdarg.h>
 

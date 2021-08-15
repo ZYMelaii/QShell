@@ -1,5 +1,5 @@
-#ifndef QSHELL_CORE_H
-#define QSHELL_CORE_H
+#ifndef QSHELL_CORE
+#define QSHELL_CORE
 
 #include <stddef.h>
 #include <stdint.h>
