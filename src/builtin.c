@@ -1,9 +1,11 @@
+#pragma once
+
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "eval.h"
-#include "qshw.h"
+#include <qsh/eval.h>
+#include <qsh/qshw.h>
 
 #define NEW_BUILTIN(func, pc) void qsh_builtin_##func(cmd_t *pc)
 

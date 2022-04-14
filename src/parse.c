@@ -1,6 +1,6 @@
 #include <assert.h>
 
-#include "eval.h"
+#include <qsh/eval.h>
 
 #define MASK_ALL      0xffff //! ×Ö·û´úÂëÇøÓò
 

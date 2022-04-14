@@ -1,7 +1,7 @@
 #include <malloc.h>
 #include <string.h>
 
-#include "core.h"
+#include <qsh/core.h>
 
 void* qsh_malloc(size_t size)
 {

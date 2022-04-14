@@ -1,2 +1,2 @@
-#include "envr.h"
-#include "eval.h"
+#include <qsh/envr.h>
+#include <qsh/eval.h>

@@ -3,7 +3,7 @@
 CC := gcc
 CXX := g++
 AR := ar
-CFLAGS := -w -I. -L. -L..\build
+CFLAGS := -w -I. -I..\include -L. -L..\build
 
 LIB_OBJS := shellio.o mmem.o \
 	envr.o hashmap.o var.o \
@@ -28,20 +28,20 @@ qshell: shell.c libqsh.a
 all: libqsh.a qshell move
 
 move:
-	@if not exist ..\build (mkdir ..\build)
-	mv -f *.o *.exe *.a ..\build
+	@if [ ! -d "../build" ]; then mkdir ../build; fi
+	mv -f *.o *.exe *.a ../build
 
-core.obj: shellio.o mmem.o hashmap.o core.h
+core.obj: shellio.o mmem.o hashmap.o
 
-envr.obj: envr.o var.o envr.h
+envr.obj: envr.o var.o
 
-cmdline.obj: cmdline.o cmdline.h
+cmdline.obj: cmdline.o
 
-eval.obj: builtin.o parse.o chrmap.o eval.h
+eval.obj: builtin.o parse.o chrmap.o
 
-uiman.obj: uiman.o uiman.h
+uiman.obj: uiman.o
 
-qshw.obj: qshw.o qshw.h
+qshw.obj: qshw.o
 
 .PHONY: clean
 clean:

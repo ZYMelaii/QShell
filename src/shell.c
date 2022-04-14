@@ -1,3 +1,5 @@
+#pragma once
+
 #include <unistd.h>
 #include <string.h>
 #include <process.h>
@@ -5,11 +7,11 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "core.h"
-#include "cmdline.h"
-#include "eval.h"
-#include "qshw.h"
-#include "uiman.h"
+#include <qsh/core.h>
+#include <qsh/cmdline.h>
+#include <qsh/eval.h>
+#include <qsh/qshw.h>
+#include <qsh/uiman.h>
 
 char** qsh_stroke(char **ps, int *num, const char *s, const char *delim)
 {

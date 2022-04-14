@@ -5,8 +5,8 @@
 #include <signal.h>
 #include <windows.h>
 
-#include "uiman.h"
-#include "qshw.h"
+#include <qsh/uiman.h>
+#include <qsh/qshw.h>
 
 static int _qshg_counter = 0;
 static void *_qshg_ptr = NULL;
@@ -49,7 +49,7 @@ BOOL WINAPI qshuis_con_handler(DWORD event)
 		case CTRL_SHUTDOWN_EVENT: //! system shutdown
 		{
 			qshui_exit(0);
-			qshw_xprint("QShell: iinterrupted and safely quted.\n");
+			qshw_xprint("QShell: interrupted and safely quited.\n");
 			return TRUE;
 		}
 		case CTRL_C_EVENT: // ctrl+c signal

@@ -3,8 +3,8 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "core.h"
-#include "cmdline.h"
+#include <qsh/core.h>
+#include <qsh/cmdline.h>
 
 // uiman.c
 extern void qshui_set_global_ptr(void*);

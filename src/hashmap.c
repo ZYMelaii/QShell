@@ -1,6 +1,6 @@
 #include <assert.h>
 
-#include "core.h"
+#include <qsh/core.h>
 
 //! 获取散列表桶数量
 inline int qsh_hashmap_size(hashmap_t *phm)
@@ -32,7 +32,7 @@ void qsh_hashmap_free(hashmap_t *phm)
 	int i;
 	for (i = 0; i < size; ++i)
 	{
-		listnode_t *node = llist[i]->next;
+		listnode_t *node = llist[i].next;
 		while (node != NULL)
 		{
 			listnode_t *tmp = node->next;
@@ -49,7 +49,7 @@ void qsh_hashmap_free(hashmap_t *phm)
 			qsh_free(node);
 			node = tmp;
 		}
-		if (llist[i].obj->data != NULL)
+		if (llist[i].obj.data != NULL)
 		{
 			pair_t *pair = (pair_t*)llist[i].obj.data;
 			qsh_free(pair->key);
@@ -72,14 +72,14 @@ inline int qsh_hashmap_add_impl(listnode_t *node, void *dupkey)
 	((pair_t*)node->obj.data)->value = NULL;
 }
 
-int qsh_hashmap_add(psm, key, hash, cmp, dup)
-	hashmap_t *psm, void *key,
-	fn_hash_t hash, fn_cmp_t cmp, fn_dup_t dup;
+int qsh_hashmap_add(
+	hashmap_t *phm, void *key,
+	fn_hash_t hash, fn_cmp_t cmp, fn_dup_t dup)
 {
 	assert(phm != NULL);
 
-	int bucketid = hash(key) % qsh_hashmap_size(psm);
-	listnode_t *node = (listnode_t*)psm->data + bucketid;
+	int bucketid = hash(key) % qsh_hashmap_size(phm);
+	listnode_t *node = (listnode_t*)phm->data + bucketid;
 
 	if (node->obj.data == NULL)
 	{
@@ -119,14 +119,14 @@ inline void qsh_hashmap_del_impl(listnode_t *node)
 	node->obj.data = NULL;
 }
 
-void qsh_hashmap_del(psm, key, hash, cmp)
-	hashmap_t *psm, void *key,
-	fn_hash_t hash, fn_cmp_t cmp;
+void qsh_hashmap_del(
+	hashmap_t *phm, void *key,
+	fn_hash_t hash, fn_cmp_t cmp)
 {
 	assert(phm != NULL);
 
-	int bucketid = hash(key) % qsh_hashmap_size(psm);
-	listnode_t *node = (listnode_t*)psm->data + bucketid;
+	int bucketid = hash(key) % qsh_hashmap_size(phm);
+	listnode_t *node = (listnode_t*)phm->data + bucketid;
 
 	if (cmp(key, ((pair_t*)node->obj.data)->key) == 0)
 	{
@@ -162,7 +162,7 @@ void qsh_hashmap_del(psm, key, hash, cmp)
  *  @author: ZYmelaii
  *  @brief: hashmap_t查找目标节点
  *  @param:
- *     # psm: hashmap_t pointer
+ *     # phm: hashmap_t pointer
  *     # key: key value (not necessarily void*)
  *     # hash: hash function
  *     # cmp: compare function
@@ -172,12 +172,12 @@ void qsh_hashmap_del(psm, key, hash, cmp)
  *     # NULL: failed
  *     # ...: done
  *******************************/
-inline listnode_t* qsh_hashmap_find(psm, key, hash, cmp)
-	hashmap_t *psm, void *key,
-	fn_hash_t hash, fn_cmp_t cmp;
+inline listnode_t* qsh_hashmap_find(
+	hashmap_t *phm, void *key,
+	fn_hash_t hash, fn_cmp_t cmp)
 {
-	int bucketid = hash(key) % qsh_hashmap_size(psm);
-	listnode_t *node = (listnode_t*)psm->data + bucketid;
+	int bucketid = hash(key) % qsh_hashmap_size(phm);
+	listnode_t *node = (listnode_t*)phm->data + bucketid;
 
 	while (node)
 	{
@@ -192,13 +192,13 @@ inline listnode_t* qsh_hashmap_find(psm, key, hash, cmp)
 	return NULL;
 }
 
-void* qsh_hashmap_getval(psm, key, hash, cmp)
-	hashmap_t *psm, void *key,
-	fn_hash_t hash, fn_cmp_t cmp;
+void* qsh_hashmap_getval(
+	hashmap_t *phm, void *key,
+	fn_hash_t hash, fn_cmp_t cmp)
 {
 	assert(phm != NULL);
 
-	listnode_t *node = qsh_hashmap_find(psm, key, hash, cmp);
+	listnode_t *node = qsh_hashmap_find(phm, key, hash, cmp);
 	if (node == NULL) return NULL;
 
 	pair_t *pair = (pair_t*)node->obj.data;
@@ -207,24 +207,24 @@ void* qsh_hashmap_getval(psm, key, hash, cmp)
 	return pair->value;
 }
 
-object_t* qsh_hashmap_write(psm, key, hash, cmp)
-	hashmap_t *psm, void *key,
-	fn_hash_t hash, fn_cmp_t cmp;
+object_t* qsh_hashmap_write(
+	hashmap_t *phm, void *key,
+	fn_hash_t hash, fn_cmp_t cmp)
 {
 	assert(phm != NULL);
 
-	listnode_t *node = qsh_hashmap_find(psm, key, hash, cmp);
+	listnode_t *node = qsh_hashmap_find(phm, key, hash, cmp);
 	if (node == NULL) return NULL;
 
 	size_t size = qsh_msize(phm->data);
-	object_t *tmp_objs = (object_t*)((char*)phm->data + size - sizeof(object_t) * 2;)
+	object_t *tmp_objs = (object_t*)((char*)phm->data + size - sizeof(object_t) * 2);
 	tmp_objs[0].data = &node->obj;
 	tmp_objs[1].data = qsh_malloc(sizeof(object_t));
 
 	return (object_t*)tmp_objs[1].data;
 }
 
-void qsh_hashmap_done(hashmap_t *psm)
+void qsh_hashmap_done(hashmap_t *phm)
 {
 	assert(phm != NULL);
 

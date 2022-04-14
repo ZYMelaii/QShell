@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "cmdline.h"
+#include <qsh/cmdline.h>
 
 void qsh_reset_cmdline_ptr(shell_t *psh)
 {
@@ -56,10 +56,11 @@ void qsh_readline(shell_t *psh)
 
 	qsh_reset_cmdline_ptr(psh);
 
-	char format[32];
+	char format[32], c;
 
 	sprintf(format, "%%%d[^\n]", BUF0_SIZE); //! 限制最大读取数，放置越界
 	int bRet = scanf(format, psh->buf_0);
+	while ((c = getchar(), c != EOF && c != '\n' && c != ' '));
 
 	if (bRet <= 0)
 	{

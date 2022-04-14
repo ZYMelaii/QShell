@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <windows.h>
 
-#include "qshw.h"
+#include <qsh/qshw.h>
 
 void qshw_vprint(int color, const char *format, va_list args)
 {
